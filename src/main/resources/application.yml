@@ -1,15 +1,24 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db:5432/db
+#    url: jdbc:postgresql://db:5432/db
+    url: jdbc:postgresql://localhost:5432/db
     username: admin
     password: password
     driver-class-name: org.postgresql.Driver
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
 spaceX:
   api-url: https://api.spacexdata.com
 
 openAI:
-#  api-key: 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
   api-key: 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
