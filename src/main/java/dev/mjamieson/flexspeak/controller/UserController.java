@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     @GetMapping
     public ResponseEntity<FirstClass> index() {
-        return new ResponseEntity<>(
-                new FirstClass("LOLSTRING"),
+        return new ResponseEntity<>(new FirstClass("LOLSTRING"),
                 HttpStatus.OK
         );
     }
