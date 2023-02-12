@@ -6,4 +6,5 @@ spaceX:
   api-url: https://api.spacexdata.com
 
 openAI:
-  api-key: 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
+#  api-key: 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
+  api-key: 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

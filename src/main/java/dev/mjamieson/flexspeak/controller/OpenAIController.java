@@ -2,6 +2,8 @@ package dev.mjamieson.flexspeak.controller;
 
 import com.theokanning.openai.OpenAiService;
 import com.theokanning.openai.completion.CompletionChoice;
+import com.theokanning.openai.completion.CompletionRequest;
+import com.theokanning.openai.engine.Engine;
 import dev.mjamieson.flexspeak.integration.external.spacex.service.external_api.SpaceXCapsuleService;
 import dev.mjamieson.flexspeak.model.FirstClass;
 import dev.mjamieson.flexspeak.service.OpenAIService;
@@ -42,12 +44,29 @@ public class OpenAIController {
 
     @PostMapping()
     public ResponseEntity<FirstClass> create(@RequestBody FirstClass firstClass) {
-//        CompletionRequest completionRequest = CompletionRequest.builder()
-//                .prompt("can you tell me about main coone cats")
-//                .echo(false)
-//                .build();
+        CompletionRequest completionRequest = CompletionRequest.builder()
+                .prompt(
+                        "Convert this aac output to natural language output," +
+                                "Want "+ firstClass.stringy() + "?" +
+                                "Natural language output for this is , " + "“I want ”" + firstClass.stringy() +
+                                "Convert this aac output to natural language output," +
+                                firstClass.stringy() +
+                                "Natural language output for this is "
+
+                )
+                .temperature(0.4)
+                .frequencyPenalty(1.57)
+                .topP(1.0)
+                .bestOf(1)
+                .echo(false)
+                .build();
+        List<Engine> engines = openAiService.getEngines();
 //        List<CompletionChoice> completionChoices = openAiService.createCompletion("ada",completionRequest).getChoices();
-        return new ResponseEntity<>(new FirstClass("LOLCREATED"),
+        List<CompletionChoice> completionChoices = openAiService.createCompletion("text-davinci-001",completionRequest).getChoices();
+//        List<CompletionChoice> completionChoices = openAiService.createCompletion("text-similarity-davinci-001",completionRequest).getChoices();
+        System.out.println(completionChoices);
+        String stringy = completionChoices.get(0).getText();
+        return new ResponseEntity<>(new FirstClass(stringy),
                 HttpStatus.CREATED
         );
     }
