@@ -47,8 +47,8 @@ public class OpenAIController {
         CompletionRequest completionRequest = CompletionRequest.builder()
                 .prompt(
                         "Convert this aac output to natural language output," +
-                                "Want "+ firstClass.stringy() + "?" +
-                                "Natural language output for this is , " + "“I want ”" + firstClass.stringy() +
+                                "Want Outside ?" +
+                                "Natural language output for this is , " + "“I want to go outside”" + firstClass.stringy() +
                                 "Convert this aac output to natural language output," +
                                 firstClass.stringy() +
                                 "Natural language output for this is "
