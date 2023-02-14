@@ -20,8 +20,8 @@ public class AAC_Controller {
     @PostMapping()
     public ResponseEntity<Void> create(@RequestBody FirstClass firstClass,
                                        @AuthenticationPrincipal UserDetails userDetails
-                                       ) {
-        return new ResponseEntity<>(aac_service.postSentence(userDetails.getUsername(),firstClass),
+    ) {
+        return new ResponseEntity<>(aac_service.postSentence(userDetails.getUsername(), firstClass),
                 HttpStatus.CREATED
         );
     }
