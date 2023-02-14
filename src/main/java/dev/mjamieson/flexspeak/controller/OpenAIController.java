@@ -62,11 +62,11 @@ public class OpenAIController {
                 .build();
         List<Engine> engines = openAiService.getEngines();
 //        List<CompletionChoice> completionChoices = openAiService.createCompletion("ada",completionRequest).getChoices();
-        List<CompletionChoice> completionChoices = openAiService.createCompletion("text-davinci-001",completionRequest).getChoices();
-//        List<CompletionChoice> completionChoices = openAiService.createCompletion("text-similarity-davinci-001",completionRequest).getChoices();
-        System.out.println(completionChoices);
-        String stringy = completionChoices.get(0).getText();
-        return new ResponseEntity<>(new FirstClass(stringy),
+//        List<CompletionChoice> completionChoices = openAiService.createCompletion("text-davinci-001",completionRequest).getChoices();
+//        System.out.println(completionChoices);
+//        String stringy = completionChoices.get(0).getText();
+//        return new ResponseEntity<>(new FirstClass(stringy),
+        return new ResponseEntity<>(new FirstClass("stringy"),
                 HttpStatus.CREATED
         );
     }
