@@ -17,6 +17,7 @@ public class AAC_ServiceImpl implements AAC_Service {
         User user = userRepository.findByEmail(username).orElseThrow();
         AAC aac = new AAC();
         aac.setSentence(firstClass.stringy());
+        aac.setUser(user);
         aac_repository.save(aac);
 
         return null;
