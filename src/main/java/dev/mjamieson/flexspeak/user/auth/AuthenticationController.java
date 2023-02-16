@@ -1,5 +1,6 @@
 package dev.mjamieson.flexspeak.user.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,4 +26,18 @@ public class AuthenticationController {
     ){
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
+//    @PostMapping("/refresh")
+//    public ResponseEntity<AuthenticationResponse> refreshAuthenticationToken(HttpServletRequest request) {
+//        String authToken = request.getHeader("Authorization");
+//        final String token = authToken.substring(7);
+//        String username = jwtTokenUtil.getUsernameFromToken(token);
+//        JwtUser userDetails = (JwtUser) userDetailsService.loadUserByUsername(username);
+//        if (jwtTokenUtil.canTokenBeRefreshed(token)) {
+//            String refreshedToken = jwtTokenUtil.refreshToken(token);
+//            return ResponseEntity.ok(new AuthenticationResponse(refreshedToken, jwtTokenUtil.generateAccessToken(userDetails)));
+//        } else {
+//            return ResponseEntity.badRequest().body(null);
+//        }
+//    }
+
 }

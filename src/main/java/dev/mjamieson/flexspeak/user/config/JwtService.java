@@ -47,8 +47,6 @@ public class JwtService {
     private void init() {
         key = Keys.hmacShaKeyFor(secret.getBytes());
     }
-
-
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, user.getEmail(), accessTokenExpirationTime);
@@ -73,11 +71,16 @@ public class JwtService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-//    public String refreshToken(String refreshToken, User user) {
-//        Map<String, Object> claims = new HashMap<>();
-//        claims.put("refreshToken", true);
-//        return createToken(claims, user.getEmail());
-//    }
+    public boolean canTokenBeRefreshed(String token) {
+        final Claims claims = extractAllClaims(token);
+        return claims.get("refreshToken") != null && !isTokenExpired(token);
+    }
+
+    public String refreshToken(String refreshToken, String userEmail) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("refreshToken", true);
+        return createToken(claims, userEmail, refreshTokenExpirationTime);
+    }
 
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(Date.from(clock.instant()));
