@@ -2,6 +2,7 @@ package dev.mjamieson.flexspeak.user.config;
 
 import dev.mjamieson.flexspeak.user.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -85,6 +86,25 @@ public class JwtService {
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(Date.from(clock.instant()));
     }
+    public boolean verifyRefreshToken(String refreshToken, User user) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+
+            if (!claims.containsKey("refreshToken") || !claims.get("refreshToken", Boolean.class)) {
+                return false;
+            }
+
+            String email = claims.getSubject();
+            return email.equals(user.getEmail()) && !isTokenExpired(refreshToken);
+        } catch (JwtException e) {
+            return false;
+        }
+    }
+
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
