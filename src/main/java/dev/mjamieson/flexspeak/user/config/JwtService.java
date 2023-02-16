@@ -1,75 +1,98 @@
 package dev.mjamieson.flexspeak.user.config;
 
+import dev.mjamieson.flexspeak.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.time.Clock;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
 @Service
+@RequiredArgsConstructor
 public class JwtService {
-    private static final String SECRET_KEY = "566D597133743677397A244226452948404D635166546A576E5A723475377821";
+    @Value("${jwt.secret}")
+    private String secret;
+
+    @Value("${jwt.expiration-time}")
+    private int expirationTime;
+
+    private SecretKey key;
+
+    private final Clock clock;
+
+    @PostConstruct
+    private void init() {
+        key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
+
+
+    public String generateToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, user.getEmail());
+    }
+
+    public String generateRefreshToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("refreshToken", true);
+        return createToken(claims, user.getEmail());
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
-
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
-    }
-
-    public String generateToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails
-    ) {
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+    public String refreshToken(String refreshToken, User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("refreshToken", true);
+        return createToken(claims, user.getEmail());
     }
 
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+    public boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(Date.from(clock.instant()));
+    }
+
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
+    private String createToken(Map<String, Object> claims, String subject) {
+        Instant now = Instant.now(clock);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(Date.from(now))
+                .setExpiration(Date.from(now.plus(expirationTime, ChronoUnit.MINUTES)))
+                .signWith(key)
+                .compact();
     }
 }
+
+

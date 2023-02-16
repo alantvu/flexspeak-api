@@ -22,3 +22,8 @@ spaceX:
 
 openAI:
   api-key: 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
+
+jwt:
+  secret: 566D597133743677397A244226452948404D635166546A576E5A723475377821
+  expiration-time: 86400000
+  refresh-expiration-time: 2592000000
