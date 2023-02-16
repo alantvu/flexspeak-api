@@ -82,7 +82,8 @@ public class AuthenticationService {
         String email = jwtService.extractUsername(refreshToken);
         User user = repository.findByEmail(email).orElseThrow();
 
-        if (jwtService.canTokenBeRefreshed(refreshToken)) {
+//        if (jwtService.canTokenBeRefreshed(refreshToken)) {
+        if (jwtService.verifyRefreshToken(refreshToken,user)) {
             String newAccessToken = jwtService.generateToken(user);
             String newRefreshToken = jwtService.generateRefreshToken(user);
             return AuthenticationResponse.builder()
