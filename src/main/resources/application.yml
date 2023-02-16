@@ -25,5 +25,5 @@ openAI:
 
 jwt:
   secret: 566D597133743677397A244226452948404D635166546A576E5A723475377821
-  expiration-time: 86400000
-  refresh-expiration-time: 2592000000
+  access-token-expiration-time: 86400000
+  refresh-token-expiration-time: 2592000000

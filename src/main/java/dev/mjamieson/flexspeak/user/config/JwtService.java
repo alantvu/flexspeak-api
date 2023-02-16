@@ -26,9 +26,19 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration-time}")
-    private int expirationTime;
+    private Long accessTokenExpirationTime;
 
+    private Long refreshTokenExpirationTime;
+
+    @Value("${jwt.access-token-expiration-time}")
+    public void setAccessTokenExpirationTime(String accessTokenExpirationTime) {
+        this.accessTokenExpirationTime = Long.parseLong(accessTokenExpirationTime);
+    }
+
+    @Value("${jwt.refresh-token-expiration-time}")
+    public void setRefreshTokenExpirationTime(String refreshTokenExpirationTime) {
+        this.refreshTokenExpirationTime = Long.parseLong(refreshTokenExpirationTime);
+    }
     private SecretKey key;
 
     private final Clock clock;
@@ -41,13 +51,13 @@ public class JwtService {
 
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, user.getEmail());
+        return createToken(claims, user.getEmail(), accessTokenExpirationTime);
     }
 
     public String generateRefreshToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("refreshToken", true);
-        return createToken(claims, user.getEmail());
+        return createToken(claims, user.getEmail(), refreshTokenExpirationTime);
     }
 
     public String extractUsername(String token) {
@@ -63,11 +73,11 @@ public class JwtService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    public String refreshToken(String refreshToken, User user) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("refreshToken", true);
-        return createToken(claims, user.getEmail());
-    }
+//    public String refreshToken(String refreshToken, User user) {
+//        Map<String, Object> claims = new HashMap<>();
+//        claims.put("refreshToken", true);
+//        return createToken(claims, user.getEmail());
+//    }
 
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(Date.from(clock.instant()));
@@ -82,7 +92,7 @@ public class JwtService {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
+    private String createToken(Map<String, Object> claims, String subject, Long expirationTime) {
         Instant now = Instant.now(clock);
 
         return Jwts.builder()
