@@ -105,11 +105,13 @@ public class JwtService {
 
     private String createToken(Map<String, Object> claims, String subject, Long expirationTime) {
         Instant now = Instant.now(clock);
+        Date from = Date.from(now.plus(expirationTime, ChronoUnit.SECONDS));
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(Date.from(now))
-                .setExpiration(Date.from(now.plus(expirationTime, ChronoUnit.MINUTES)))
+                .setExpiration(Date.from(now.plus(expirationTime, ChronoUnit.SECONDS)))
+//                .setExpiration(Date.from(now.plus(expirationTime, ChronoUnit.MINUTES)))
                 .signWith(key)
                 .compact();
     }
