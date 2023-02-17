@@ -23,30 +23,23 @@ import java.util.function.Function;
 @Service
 @RequiredArgsConstructor
 public class JwtService {
+    private final Clock clock;
+    private SecretKey key;
+
     @Value("${jwt.secret}")
     private String secret;
 
+    @Value("${jwt.access-token-expiration-time}")
     private Long accessTokenExpirationTime;
 
-    private Long refreshTokenExpirationTime;
-
-    @Value("${jwt.access-token-expiration-time}")
-    public void setAccessTokenExpirationTime(String accessTokenExpirationTime) {
-        this.accessTokenExpirationTime = Long.parseLong(accessTokenExpirationTime);
-    }
-
     @Value("${jwt.refresh-token-expiration-time}")
-    public void setRefreshTokenExpirationTime(String refreshTokenExpirationTime) {
-        this.refreshTokenExpirationTime = Long.parseLong(refreshTokenExpirationTime);
-    }
-    private SecretKey key;
-
-    private final Clock clock;
+    private Long refreshTokenExpirationTime;
 
     @PostConstruct
     private void init() {
         key = Keys.hmacShaKeyFor(secret.getBytes());
     }
+
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, user.getEmail(), accessTokenExpirationTime);
@@ -71,32 +64,16 @@ public class JwtService {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    public boolean canTokenBeRefreshed(String token) {
-        final Claims claims = extractAllClaims(token);
-        return claims.get("refreshToken") != null && !isTokenExpired(token);
-    }
-
-    public String refreshToken(String refreshToken, String userEmail) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("refreshToken", true);
-        return createToken(claims, userEmail, refreshTokenExpirationTime);
-    }
-
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(Date.from(clock.instant()));
     }
+
     public boolean verifyRefreshToken(String refreshToken, String userEmail) {
         try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(refreshToken)
-                    .getBody();
-
+            Claims claims = parseToken(refreshToken);
             if (!claims.containsKey("refreshToken") || !claims.get("refreshToken", Boolean.class)) {
                 return false;
             }
-
             String email = claims.getSubject();
             return email.equals(userEmail) && !isTokenExpired(refreshToken);
         } catch (JwtException e) {
@@ -106,16 +83,10 @@ public class JwtService {
 
     public boolean checkRefreshToken(String refreshToken, String userEmail) {
         try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(refreshToken)
-                    .getBody();
-
+            Claims claims = parseToken(refreshToken);
             if (!claims.containsKey("refreshToken") || !claims.get("refreshToken", Boolean.class)) {
                 return false;
             }
-
             String email = claims.getSubject();
             return email.equals(userEmail);
         } catch (JwtException e) {
@@ -123,19 +94,17 @@ public class JwtService {
         }
     }
 
-
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
+        final Claims claims = parseToken(token);
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
+    private Claims parseToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
     private String createToken(Map<String, Object> claims, String subject, Long expirationTime) {
         Instant now = Instant.now(clock);
-
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
