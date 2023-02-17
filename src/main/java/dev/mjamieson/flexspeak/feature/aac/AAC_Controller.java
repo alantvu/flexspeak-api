@@ -1,7 +1,7 @@
 package dev.mjamieson.flexspeak.feature.aac;
 
 
-import dev.mjamieson.flexspeak.feature.model.SentenceRequest;
+import dev.mjamieson.flexspeak.feature.model.Sentence;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +18,10 @@ public class AAC_Controller {
     private final AAC_Service aac_service;
 
     @PostMapping()
-    public ResponseEntity<Void> create(@RequestBody SentenceRequest firstClass,
+    public ResponseEntity<Void> create(@RequestBody Sentence sentence,
                                        @AuthenticationPrincipal UserDetails userDetails
     ) {
-        return new ResponseEntity<>(aac_service.postSentence(userDetails.getUsername(), firstClass),
+        return new ResponseEntity<>(aac_service.postSentence(userDetails.getUsername(), sentence),
                 HttpStatus.CREATED
         );
     }

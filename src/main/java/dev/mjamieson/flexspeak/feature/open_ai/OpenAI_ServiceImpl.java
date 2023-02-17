@@ -6,8 +6,7 @@ import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.engine.Engine;
 import dev.mjamieson.flexspeak.feature.aac.AAC_Service;
 import dev.mjamieson.flexspeak.annotation.CurrentUsername;
-import dev.mjamieson.flexspeak.feature.model.SentenceRequest;
-import dev.mjamieson.flexspeak.feature.model.SentenceResponse;
+import dev.mjamieson.flexspeak.feature.model.Sentence;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +29,7 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
     }
 
     @Override
-    public SentenceResponse post(@CurrentUsername String username, SentenceRequest sentence) {
+    public Sentence post(@CurrentUsername String username, Sentence sentence) {
         aac_service.postSentence(username,sentence);
         CompletionRequest completionRequest = CompletionRequest.builder()
                 .prompt(
@@ -52,7 +51,9 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
 //        List<CompletionChoice> completionChoices = openAiService.createCompletion("ada",completionRequest).getChoices();
         List<CompletionChoice> completionChoices = openAiService.createCompletion("text-davinci-001",completionRequest).getChoices();
         System.out.println(completionChoices);
-        String stringy = completionChoices.get(0).getText();
-        return new SentenceResponse(stringy);
+        String aiSentence = completionChoices.get(0).getText();
+        return Sentence.builder()
+                .sentence(aiSentence)
+                .build();
     }
 }

@@ -1,7 +1,6 @@
 package dev.mjamieson.flexspeak.feature.open_ai;
 
-import dev.mjamieson.flexspeak.feature.model.SentenceRequest;
-import dev.mjamieson.flexspeak.feature.model.SentenceResponse;
+import dev.mjamieson.flexspeak.feature.model.Sentence;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +16,8 @@ public class OpenAIController {
     private final OpenAI_Service openAI_service;
 
     @PostMapping()
-    public ResponseEntity<SentenceResponse> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody SentenceRequest sentenceRequest) {
-        return new ResponseEntity<>(openAI_service.post(userDetails.getUsername(), sentenceRequest),
+    public ResponseEntity<Sentence> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Sentence sentence) {
+        return new ResponseEntity<>(openAI_service.post(userDetails.getUsername(), sentence),
                 HttpStatus.CREATED
         );
     }
