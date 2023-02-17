@@ -52,7 +52,7 @@ public class JwtService {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, user.getEmail(), accessTokenExpirationTime);
     }
-
+//lol
     public String generateRefreshToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("refreshToken", true);
