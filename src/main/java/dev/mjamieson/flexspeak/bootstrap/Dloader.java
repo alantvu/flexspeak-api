@@ -1,7 +1,7 @@
 package dev.mjamieson.flexspeak.bootstrap;
 
-import dev.mjamieson.flexspeak.user.auth.AuthenticationService;
-import dev.mjamieson.flexspeak.user.auth.RegisterRequest;
+import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationService;
+import dev.mjamieson.flexspeak.feature.user.auth.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
