@@ -6,7 +6,6 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,7 +51,7 @@ public class JwtService {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, user.getEmail(), accessTokenExpirationTime);
     }
-//lol
+
     public String generateRefreshToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("refreshToken", true);
@@ -86,7 +85,7 @@ public class JwtService {
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(Date.from(clock.instant()));
     }
-    public boolean verifyRefreshToken(String refreshToken, User user) {
+    public boolean verifyRefreshToken(String refreshToken, String userEmail) {
         try {
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -99,7 +98,26 @@ public class JwtService {
             }
 
             String email = claims.getSubject();
-            return email.equals(user.getEmail()) && !isTokenExpired(refreshToken);
+            return email.equals(userEmail) && !isTokenExpired(refreshToken);
+        } catch (JwtException e) {
+            return false;
+        }
+    }
+
+    public boolean checkRefreshToken(String refreshToken, String userEmail) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+
+            if (!claims.containsKey("refreshToken") || !claims.get("refreshToken", Boolean.class)) {
+                return false;
+            }
+
+            String email = claims.getSubject();
+            return email.equals(userEmail);
         } catch (JwtException e) {
             return false;
         }

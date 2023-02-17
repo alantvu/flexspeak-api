@@ -53,28 +53,6 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .build();
     }
-    public AuthenticationResponse refresh(AuthenticationResponse request) {
-        // Verify the refresh token
-//        if (!jwtService.verifyRefreshToken(request.getRefreshToken())) {
-//            throw new InvalidRefreshTokenException();
-//        }
-
-        // Get the user ID from the refresh token
-        String userId = jwtService.extractUsername(request.getRefreshToken());
-
-        // Get the user from the repository
-        User user = repository.findByEmail(userId).orElseThrow();
-
-        // Generate a new JWT token and refresh token
-        String newToken = jwtService.generateToken(user);
-        String newRefreshToken = jwtService.generateRefreshToken(user);
-
-        // Return the new tokens in a new authentication response
-        return AuthenticationResponse.builder()
-                .token(newToken)
-                .refreshToken(newRefreshToken)
-                .build();
-    }
     public AuthenticationResponse refreshTokens(HttpServletRequest request) {
         String refreshToken = request.getHeader("Authorization");
         refreshToken = refreshToken.replace("Bearer ", "");
@@ -82,8 +60,7 @@ public class AuthenticationService {
         String email = jwtService.extractUsername(refreshToken);
         User user = repository.findByEmail(email).orElseThrow();
 
-//        if (jwtService.canTokenBeRefreshed(refreshToken)) {
-        if (jwtService.verifyRefreshToken(refreshToken,user)) {
+        if (jwtService.verifyRefreshToken(refreshToken,email)) {
             String newAccessToken = jwtService.generateToken(user);
             String newRefreshToken = jwtService.generateRefreshToken(user);
             return AuthenticationResponse.builder()
