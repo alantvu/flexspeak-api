@@ -1,6 +1,6 @@
 package dev.mjamieson.flexspeak.controller;
 
-import dev.mjamieson.flexspeak.model.FirstClass;
+import dev.mjamieson.flexspeak.model.SentenceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
     @GetMapping
-    public ResponseEntity<FirstClass> index() {
-        return new ResponseEntity<>(new FirstClass("LOLSTRING"),
+    public ResponseEntity<String> index() {
+        return new ResponseEntity<>("lol",
                 HttpStatus.OK
         );
     }
