@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository repository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -28,7 +28,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        repository.save(user);
+        userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         return AuthenticationResponse.builder()
@@ -44,7 +44,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = repository.findByEmail(request.getEmail())
+        var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
@@ -58,7 +58,7 @@ public class AuthenticationService {
         refreshToken = refreshToken.replace("Bearer ", "");
 
         String email = jwtService.extractUsername(refreshToken);
-        User user = repository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email).orElseThrow();
 
         if (jwtService.verifyRefreshToken(refreshToken,email)) {
             String newAccessToken = jwtService.generateToken(user);
