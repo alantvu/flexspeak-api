@@ -1,6 +1,5 @@
 package dev.mjamieson.flexspeak.feature.aac;
 
-
 import dev.mjamieson.flexspeak.feature.model.Sentence;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequestMapping("/aac")
@@ -19,11 +17,9 @@ public class AAC_Controller {
 
     @PostMapping()
     public ResponseEntity<Void> create(@RequestBody Sentence sentence,
-                                       @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        return new ResponseEntity<>(aac_service.postSentence(userDetails.getUsername(), sentence),
-                HttpStatus.CREATED
-        );
+                                       @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        aac_service.postSentence(username, sentence);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
 }
