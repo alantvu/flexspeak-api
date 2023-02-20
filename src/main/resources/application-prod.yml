@@ -1,8 +1,8 @@
 server:
-  profiles:
-    active: prod
   port: 5000
 spring:
+  profiles:
+    active: prod
   datasource:
 #    url: jdbc:postgresql://db:5432/db
     url: jdbc:postgresql://aacdatabase.cpmr4ihortn6.us-east-1.rds.amazonaws.com:5432/db
