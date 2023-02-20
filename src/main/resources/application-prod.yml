@@ -1,16 +1,18 @@
-spring:
+server:
   profiles:
     active: @spring.profiles.active@
+  port: 5000
+spring:
   datasource:
-    #    url: jdbc:postgresql://db:5432/db
-    url: jdbc:postgresql://localhost:5432/db
-    username: admin
-    password: password
+#    url: jdbc:postgresql://db:5432/db
+    url: jdbc:postgresql://aacdatabase.cpmr4ihortn6.us-east-1.rds.amazonaws.com:5432/db
+    username: michaeljamieson
+    password:
     driver-class-name: org.postgresql.Driver
   jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
+#    hibernate:
+#      ddl-auto: create-drop
+#    show-sql: true
     properties:
       hibernate:
         format_sql: true
@@ -23,7 +25,7 @@ spaceX:
   api-url: https://api.spacexdata.com
 
 openAI:
-  #  api-key: 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 #mikes
+#  api-key: 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 #mikes
   api-key: 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
 
 jwt:
