@@ -1,6 +1,6 @@
 server:
   profiles:
-    active: @spring.profiles.active@
+    active: prod
   port: 5000
 spring:
   datasource:
