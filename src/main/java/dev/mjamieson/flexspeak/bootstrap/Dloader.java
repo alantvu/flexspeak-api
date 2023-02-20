@@ -15,7 +15,7 @@ public class Dloader implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-        authData();
+//        authData();
 
     }
 
