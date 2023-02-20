@@ -1,5 +1,6 @@
 package dev.mjamieson.flexspeak.feature.user.config;
 
+import dev.mjamieson.flexspeak.config.JWT_ConfigurationProperty;
 import dev.mjamieson.flexspeak.feature.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -8,6 +9,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -25,31 +27,17 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
     private final Clock clock;
-    private SecretKey key;
-
-    @Value("${jwt.secret}")
-    private String secret;
-
-    @Value("${jwt.access-token-expiration-time}")
-    private Long accessTokenExpirationTime;
-
-    @Value("${jwt.refresh-token-expiration-time}")
-    private Long refreshTokenExpirationTime;
-
-    @PostConstruct
-    private void init() {
-        key = Keys.hmacShaKeyFor(secret.getBytes());
-    }
+    private final JWT_ConfigurationProperty jwt_configurationProperty;
 
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, user.getEmail(), accessTokenExpirationTime);
+        return createToken(claims, user.getEmail(), jwt_configurationProperty.getAccessTokenExpirationTime());
     }
 
     public String generateRefreshToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("refreshToken", true);
-        return createToken(claims, user.getEmail(), refreshTokenExpirationTime);
+        return createToken(claims, user.getEmail(), jwt_configurationProperty.getRefreshTokenExpirationTime());
     }
 
     public String extractUsername(String token) {
@@ -101,7 +89,7 @@ public class JwtService {
     }
 
     private Claims parseToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(jwt_configurationProperty.getKey()).build().parseClaimsJws(token).getBody();
     }
 
     private String createToken(Map<String, Object> claims, String subject, Long expirationTime) {
@@ -113,7 +101,7 @@ public class JwtService {
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plus(expirationTime, ChronoUnit.SECONDS)))
 //                .setExpiration(Date.from(now.plus(expirationTime, ChronoUnit.MINUTES)))
-                .signWith(key)
+                .signWith(jwt_configurationProperty.getKey())
                 .compact();
     }
 }
