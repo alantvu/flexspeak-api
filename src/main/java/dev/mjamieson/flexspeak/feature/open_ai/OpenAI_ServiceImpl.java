@@ -31,29 +31,27 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
     @Override
     public Sentence post(@CurrentUsername String username, Sentence sentence) {
         aac_service.postSentence(username,sentence);
-        CompletionRequest completionRequest = CompletionRequest.builder()
-                .prompt(
-                        "Convert this aac output to natural language output," +
-                                "Want Outside ?" +
-                                "Natural language output for this is , " + "“I want to go outside”" + sentence.sentence() +
-                                "Convert this aac output to natural language output," +
-                                sentence.sentence() +
-                                "Natural language output for this is "
+        // Convert the string to lowercase
+        String processedString = sentence.sentence().toLowerCase();
 
-                )
+        // Remove all commas and full-stops
+        processedString = processedString.replaceAll("[,.]", "");
+        processedString += " ->";
+
+        CompletionRequest completionRequest = CompletionRequest.builder()
+                .prompt(processedString)
                 .temperature(0.4)
                 .frequencyPenalty(1.57)
                 .topP(1.0)
                 .bestOf(1)
                 .echo(false)
                 .build();
-        List<Engine> engines = openAiService.getEngines();
-//        List<CompletionChoice> completionChoices = openAiService.createCompletion("ada",completionRequest).getChoices();
-        List<CompletionChoice> completionChoices = openAiService.createCompletion("text-davinci-001",completionRequest).getChoices();
-        System.out.println(completionChoices);
+        List<CompletionChoice> completionChoices = openAiService.createCompletion("ada:ft-personal-2023-02-19-03-57-02",completionRequest).getChoices();
         String aiSentence = completionChoices.get(0).getText();
+        String[] parts = aiSentence.split("\n\n");
         return Sentence.builder()
-                .sentence(aiSentence)
+                .sentence(parts[0])
+//                .sentence(sentence.sentence())
                 .build();
     }
 }

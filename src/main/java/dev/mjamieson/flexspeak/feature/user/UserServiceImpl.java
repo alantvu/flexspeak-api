@@ -4,6 +4,8 @@ import dev.mjamieson.flexspeak.feature.aac.AAC_Repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
@@ -13,10 +15,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDTO get(String username) {
-
+        User user = userRepository.findByEmail(username).orElseThrow();
+        long count = aac_repository.count();
 
         return UserDTO.builder()
-                .firstname("llol")
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .email(user.getEmail())
+                .aacCount(count)
                 .build();
     }
 }
