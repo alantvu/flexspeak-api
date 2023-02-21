@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 @Entity
 public class AAC {
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "aac_id_seq")
+    @SequenceGenerator(name = "aac_id_seq", sequenceName = "aac_id_seq", allocationSize = 1)
     private Integer id;
 
     private String sentence;

@@ -66,7 +66,7 @@
             <artifactId>client</artifactId>
             <version>0.0.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core -->
+        <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core s-->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
