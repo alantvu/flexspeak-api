@@ -17,7 +17,7 @@ public class AAC_ServiceImpl implements AAC_Service {
         User user = userRepository.findByEmail(username).orElseThrow();
         AAC aac = new AAC();
         int amountOfWords = sentence.words().size();
-        aac.setSentence(sentence.sentence());
+        aac.setSentence(sentence.sentence().toLowerCase());
         aac.setStartTime(sentence.words().get(0).timestamp());
         aac.setEndTime(sentence.words().get(amountOfWords - 1).timestamp());
         aac.setUser(user);
