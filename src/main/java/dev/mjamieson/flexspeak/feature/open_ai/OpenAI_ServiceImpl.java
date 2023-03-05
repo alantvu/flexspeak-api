@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,16 +38,19 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
         // Remove all commas and full-stops
         processedString = processedString.replaceAll("[,.]", "");
         processedString += " ->";
-
+        List<String> stopList = new ArrayList<String>();
+        stopList.add("\n");
         CompletionRequest completionRequest = CompletionRequest.builder()
                 .prompt(processedString)
-                .temperature(0.4)
+                .temperature(0.0)
                 .frequencyPenalty(1.57)
+                .maxTokens(20)
                 .topP(1.0)
                 .bestOf(1)
+                .stop(stopList)
                 .echo(false)
                 .build();
-        List<CompletionChoice> completionChoices = openAiService.createCompletion("ada:ft-personal-2023-02-19-03-57-02",completionRequest).getChoices();
+        List<CompletionChoice> completionChoices = openAiService.createCompletion("ada:ft-personal:grammar-plus-2023-03-05-05-05-48",completionRequest).getChoices();
         String aiSentence = completionChoices.get(0).getText();
         String[] parts = aiSentence.split("\n\n");
         return Sentence.builder()
