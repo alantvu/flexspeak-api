@@ -33,7 +33,9 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
     public Sentence post(@CurrentUsername String username, Sentence sentence) {
         aac_service.postSentence(username,sentence);
         // Convert the string to lowercase
-        String processedString = sentence.sentence().toLowerCase();
+        String processedString = sentence.sentence()
+                .trim()
+                .toLowerCase();
 
         // Remove all commas and full-stops
         processedString = processedString.replaceAll("[,.]", "");
@@ -52,10 +54,9 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
                 .build();
         List<CompletionChoice> completionChoices = openAiService.createCompletion("ada:ft-personal:grammar-plus-2023-03-05-05-05-48",completionRequest).getChoices();
         String aiSentence = completionChoices.get(0).getText();
-        String[] parts = aiSentence.split("\n\n");
+
         return Sentence.builder()
-                .sentence(parts[0])
-//                .sentence(sentence.sentence())
+                .sentence(aiSentence)
                 .build();
     }
 }
