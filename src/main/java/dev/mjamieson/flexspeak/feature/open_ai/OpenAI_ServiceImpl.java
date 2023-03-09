@@ -32,7 +32,7 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
     @Override
     public Sentence post(@CurrentUsername String username, Sentence sentence) {
         aac_service.postSentence(username,sentence);
-        // Convert the string to lowercase
+
         String processedString = sentence.sentence()
                 .trim()
                 .toLowerCase();
