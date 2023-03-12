@@ -58,5 +58,6 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
         return Sentence.builder()
                 .sentence(aiSentence)
                 .build();
+
     }
 }
