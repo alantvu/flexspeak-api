@@ -1,6 +1,7 @@
 package dev.mjamieson.flexspeak;
 
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationRequest;
+import dev.mjamieson.flexspeak.feature.user.auth.RegisterRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +26,8 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
 //    private JWTUtil jwtUtil;
 
     //    private static final Random RANDOM = new Random();
-    private static final String AUTHENTICATION_PATH = "/api/v1/auth";
+    private static final String AUTHENTICATION_PATH = "/auth/authenticate";
+    private static final String REGISTER_PATH = "/auth/register";
     private static final String CUSTOMER_PATH = "/api/v1/customers";
 
     @Test
@@ -60,19 +62,26 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .exchange()
                 .expectStatus()
                 .isForbidden();
+
+        RegisterRequest registerRequest = RegisterRequest.builder()
+                .firstname("michael")
+                .lastname("jamieson")
+                .email("michaeljamieson@gmail.com")
+                .password("password")
+                .build();
 //
 //        // send a post customerRegistrationRequest
-//        webTestClient.post()
-//                .uri(CUSTOMER_PATH)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(
-//                        Mono.just(customerRegistrationRequest),
-//                        CustomerRegistrationRequest.class
-//                )
-//                .exchange()
-//                .expectStatus()
-//                .isOk();
+        webTestClient.post()
+                .uri(REGISTER_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(
+                        Mono.just(registerRequest),
+                        RegisterRequest.class
+                )
+                .exchange()
+                .expectStatus()
+                .isOk();
 //
 //        EntityExchangeResult<AuthenticationResponse> result = webTestClient.post()
 //                .uri(AUTHENTICATION_PATH + "/login")
