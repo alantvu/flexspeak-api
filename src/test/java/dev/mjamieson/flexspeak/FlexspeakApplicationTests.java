@@ -106,9 +106,9 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
         String token = result.getResponseBody().getToken();
 
         List<Word> words = new ArrayList<>();
-        words.add(new Word("hello", LocalDateTime.now()));
-        words.add(new Word("world", LocalDateTime.now()));
-        words.add(new Word("example", LocalDateTime.now()));
+        words.add(new Word("i", LocalDateTime.now()));
+        words.add(new Word("like", LocalDateTime.now()));
+        words.add(new Word("food", LocalDateTime.now()));
         String sentencer = String.join(" ", words.stream().map(Word::word).toArray(String[]::new));
         Sentence sentence = Sentence.builder()
                 .words(words)
