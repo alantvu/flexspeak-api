@@ -98,6 +98,6 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .expectBody(new ParameterizedTypeReference<AuthenticationResponse>() {
                 })
                 .returnResult();
-
+        String token = result.getResponseBody().getToken();
     }
 }
