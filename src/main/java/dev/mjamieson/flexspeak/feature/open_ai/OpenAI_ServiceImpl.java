@@ -52,7 +52,8 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
                 .stop(stopList)
                 .echo(false)
                 .build();
-        List<CompletionChoice> completionChoices = openAiService.createCompletion("ada:ft-personal:grammar-plus-2023-03-05-05-05-48",completionRequest).getChoices();
+//        List<CompletionChoice> completionChoices = openAiService.createCompletion("ada:ft-personal:grammar-plus-2023-03-05-05-05-48",completionRequest).getChoices();
+        List<CompletionChoice> completionChoices = openAiService.createCompletion("gpt-3.5-turbo",completionRequest).getChoices();
         String aiSentence = completionChoices.get(0).getText();
 
         return Sentence.builder()
