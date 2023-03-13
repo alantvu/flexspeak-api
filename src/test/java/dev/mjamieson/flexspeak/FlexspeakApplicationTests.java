@@ -1,11 +1,14 @@
 package dev.mjamieson.flexspeak;
 
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationRequest;
+import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationResponse;
 import dev.mjamieson.flexspeak.feature.user.auth.RegisterRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
@@ -38,7 +41,8 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
 //        Name fakerName = faker.name();
 //
 //        String name = fakerName.fullName();
-        String email = "lsadjashjdh" + "-" + UUID.randomUUID() + "@amigoscode.com";
+//        String email = "lsadjashjdh" + "-" + UUID.randomUUID() + "@amigoscode.com";
+        String email = "michaeljamieson@gmail.com";
 //        int age = RANDOM.nextInt(1, 100);
 //
 //        Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
@@ -55,7 +59,7 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
         );
 //
         webTestClient.post()
-                .uri(AUTHENTICATION_PATH + "/authenticate")
+                .uri(AUTHENTICATION_PATH )
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(authenticationRequest), AuthenticationRequest.class)
@@ -82,37 +86,18 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .exchange()
                 .expectStatus()
                 .isOk();
-//
-//        EntityExchangeResult<AuthenticationResponse> result = webTestClient.post()
-//                .uri(AUTHENTICATION_PATH + "/login")
-//                .accept(MediaType.APPLICATION_JSON)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(Mono.just(authenticationRequest), AuthenticationRequest.class)
-//                .exchange()
-//                .expectStatus()
-//                .isOk()
-//                .expectBody(new ParameterizedTypeReference<AuthenticationResponse>() {
-//                })
-//                .returnResult();
-//
-//        String jwtToken = result.getResponseHeaders()
-//                .get(HttpHeaders.AUTHORIZATION)
-//                .get(0);
-//
-//        AuthenticationResponse authenticationResponse = result.getResponseBody();
-//
-//        CustomerDTO customerDTO = authenticationResponse.customerDTO();
-//
-//        assertThat(jwtUtil.isTokenValid(
-//                jwtToken,
-//                customerDTO.username())).isTrue();
-//
-//        assertThat(customerDTO.email()).isEqualTo(email);
-//        assertThat(customerDTO.age()).isEqualTo(age);
-//        assertThat(customerDTO.name()).isEqualTo(name);
-//        assertThat(customerDTO.username()).isEqualTo(email);
-//        assertThat(customerDTO.gender()).isEqualTo(gender);
-//        assertThat(customerDTO.roles()).isEqualTo(List.of("ROLE_USER"));
-//
+
+        EntityExchangeResult<AuthenticationResponse> result = webTestClient.post()
+                .uri(AUTHENTICATION_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(authenticationRequest), AuthenticationRequest.class)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(new ParameterizedTypeReference<AuthenticationResponse>() {
+                })
+                .returnResult();
+
     }
 }
