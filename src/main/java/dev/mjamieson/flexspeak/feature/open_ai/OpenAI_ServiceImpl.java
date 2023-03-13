@@ -40,8 +40,8 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
         // Remove all commas and full-stops
         processedString = processedString.replaceAll("[,.]", "");
 //        processedString += " ->";
-//        List<String> stopList = new ArrayList<String>();
-//        stopList.add("\n");
+        List<String> stopList = new ArrayList<String>();
+        stopList.add("\n");
         CompletionRequest completionRequest = CompletionRequest.builder()
                 .prompt(processedString)
                 .temperature(0.0)
@@ -49,7 +49,7 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
                 .maxTokens(20)
                 .topP(1.0)
                 .bestOf(1)
-//                .stop(stopList)
+                .stop(stopList)
                 .echo(false)
                 .build();
 //        List<CompletionChoice> completionChoices = openAiService.createCompletion("ada:ft-personal:grammar-plus-2023-03-05-05-05-48",completionRequest).getChoices();
