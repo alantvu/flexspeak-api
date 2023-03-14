@@ -38,6 +38,7 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
     private static final String AUTHENTICATION_PATH = "/auth/authenticate";
     private static final String REGISTER_PATH = "/auth/register";
     private static final String CUSTOMER_PATH = "/api/v1/customers";
+    private static final String AAC_PATH = "/aac";
     private static final String OPEN_AI_PATH = "/open_ai";
 
     @Test
@@ -66,7 +67,7 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
         );
 //
         webTestClient.post()
-                .uri(AUTHENTICATION_PATH )
+                .uri(AUTHENTICATION_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(authenticationRequest), AuthenticationRequest.class)
@@ -114,10 +115,9 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .words(words)
                 .sentence(sentencer)
                 .build();
-
         webTestClient.post()
-                .uri(OPEN_AI_PATH)
-                .header("Authorization", "Bearer " + token) // Add the token to the Bearer header
+                .uri(AAC_PATH)
+                .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
@@ -126,7 +126,21 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 )
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isCreated();
+
+
+//        webTestClient.post()
+//                .uri(OPEN_AI_PATH)
+//                .header("Authorization", "Bearer " + token)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(
+//                        Mono.just(sentence),
+//                        Sentence.class
+//                )
+//                .exchange()
+//                .expectStatus()
+//                .isOk();
 
     }
 }
