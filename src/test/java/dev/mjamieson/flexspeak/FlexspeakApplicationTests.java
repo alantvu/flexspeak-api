@@ -10,9 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -39,6 +42,7 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
     private static final String REGISTER_PATH = "/auth/register";
     private static final String CUSTOMER_PATH = "/api/v1/customers";
     private static final String AAC_PATH = "/aac";
+    private static final String USER_PATH = "/user";
     private static final String OPEN_AI_PATH = "/open_ai";
 
     @Test
@@ -141,6 +145,38 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
 //                .exchange()
 //                .expectStatus()
 //                .isOk();
+
+        webTestClient.get()
+                .uri(USER_PATH)
+                .header("Authorization", "Bearer " + token)
+                .accept(MediaType.APPLICATION_JSON)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(
+//                        Mono.just(authenticationRequest),
+//                        AuthenticationRequest.class
+//                )
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        webTestClient
+                .method(HttpMethod.DELETE)
+                .uri(USER_PATH)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(authenticationRequest))
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        webTestClient.post()
+                .uri(AUTHENTICATION_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(authenticationRequest), AuthenticationRequest.class)
+                .exchange()
+                .expectStatus()
+                .isForbidden();
 
     }
 }
