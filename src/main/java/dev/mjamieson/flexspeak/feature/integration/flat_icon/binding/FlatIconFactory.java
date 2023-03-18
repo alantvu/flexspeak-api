@@ -10,7 +10,7 @@ public class FlatIconFactory {
 
     @Value("${flatIcon.api-url}")
     private String apiURL;
-   @Value("${flatIcon.api-key}")
+    @Value("${flatIcon.api-key}")
     private String apiKey;
 
 
@@ -19,7 +19,8 @@ public class FlatIconFactory {
     @PostConstruct
     private void initApiBinding() {
         currentBinding = new FlatIconBindingConcrete(
-                apiURL
+                apiURL,
+                apiKey
         );
         currentBinding.init();
     }

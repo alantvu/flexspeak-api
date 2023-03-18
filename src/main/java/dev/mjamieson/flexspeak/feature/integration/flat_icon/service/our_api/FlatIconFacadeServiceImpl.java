@@ -34,7 +34,7 @@ public class FlatIconFacadeServiceImpl implements FlatIconFacadeService {
 
     @SneakyThrows
     @Override
-    public void postIntegration(Object ourAPICapsule) {
+    public void postIntegration(Object object) {
 //        SpaceXCapsule spaceXCapsule = SpaceXCapsule.from(ourAPICapsule);
 
 //        flatIconFactory.

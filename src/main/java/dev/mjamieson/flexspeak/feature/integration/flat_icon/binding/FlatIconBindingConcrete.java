@@ -12,9 +12,11 @@ import java.util.concurrent.Executors;
 
 public class FlatIconBindingConcrete extends RequestAPIBindingBase implements FlatIconBinding {
     private final String apiURL;
+    private final String apiKey;
 
-    public FlatIconBindingConcrete(String apiURL) {
+    public FlatIconBindingConcrete(String apiURL,String apiKey) {
         this.apiURL = apiURL;
+        this.apiKey = apiKey;
     }
     @Override
     public void init() {
