@@ -1,4 +1,4 @@
-package dev.mjamieson.flexspeak.feature.custom_aac;
+package dev.mjamieson.flexspeak.feature.custom_word;
 
 import dev.mjamieson.flexspeak.feature.model.Sentence;
 import lombok.RequiredArgsConstructor;
@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/custom_aac")
+@RequestMapping("/custom_word")
 @RequiredArgsConstructor
-public class CustomAACController {
-    private final CustomAACService flatIconService;
+public class CustomWordController {
+    private final CustomWordService customWordService;
 
     @PostMapping()
-    public ResponseEntity<Sentence> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Sentence sentence) {
-        return new ResponseEntity<>(flatIconService.post(userDetails.getUsername(), sentence),
+    public ResponseEntity<Sentence> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CustomWordRequest customWordRequest) {
+        return new ResponseEntity<>(customWordService.post(userDetails.getUsername(), customWordRequest),
                 HttpStatus.CREATED
         );
     }
