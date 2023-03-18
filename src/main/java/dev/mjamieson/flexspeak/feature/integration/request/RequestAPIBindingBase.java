@@ -1,5 +1,6 @@
 package dev.mjamieson.flexspeak.feature.integration.request;
 
+import dev.mjamieson.flexspeak.feature.integration.thread.CustomAPIExecutor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -9,15 +10,16 @@ import org.springframework.lang.Nullable;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 
 public abstract class RequestAPIBindingBase implements RequestApiBindingInterface {
     protected HttpHeaders httpHeaders;
+    protected CustomAPIExecutor customAPIExecutor;
 
     @Override
     public void init() {
         this.httpHeaders = setHttpHeaders();
     }
-
     @Override
     public <T> ResponseWrapper<T> makeRequest(URI uri, HttpMethod httpMethod, Class<T> returnClazz) {
         return makeRequest(uri, httpMethod, returnClazz, null);
@@ -37,6 +39,12 @@ public abstract class RequestAPIBindingBase implements RequestApiBindingInterfac
 
     public abstract String getApiUrl();
 
+
+    public abstract CustomAPIExecutor createAPIExecutorService();
+    @Override
+    public ExecutorService getExecutorService() {
+        return this.customAPIExecutor.getExecutorService();
+    };
 
     protected HttpHeaders setHttpHeaders() {
 

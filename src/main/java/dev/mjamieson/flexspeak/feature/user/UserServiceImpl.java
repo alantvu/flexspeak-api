@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO get(String username) {
         User user = userRepository.findByEmail(username).orElseThrow();
-        long count = aac_repository.count();
+        long count = aac_repository.countByUser(user);
 
         return UserDTO.builder()
                 .firstname(user.getFirstname())
