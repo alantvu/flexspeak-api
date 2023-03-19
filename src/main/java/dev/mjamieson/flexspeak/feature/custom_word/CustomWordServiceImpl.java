@@ -24,16 +24,8 @@ public class CustomWordServiceImpl implements CustomWordService {
     @Override
     public Sentence post(@CurrentUsername String username, CustomWordRequest customWordRequest) {
 
-        // can probably
         User user = userRepository.findByEmail(username).orElseThrow();
         CustomWord customWord = new CustomWord();
-        /**
-         * custom_word
-         *  word_to_display
-         *  word_to_speak
-         *  image_path
-         *  user_id
-         * */
         customWord.setWordToDisplay(customWordRequest.wordToDisplay());
         customWord.setWordToSpeak(customWordRequest.wordToSpeak());
         customWord.setImagePath(customWordRequest.imagePath());
