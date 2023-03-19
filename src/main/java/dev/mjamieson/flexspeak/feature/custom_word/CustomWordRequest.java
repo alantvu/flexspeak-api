@@ -4,7 +4,7 @@ public record CustomWordRequest(
         String wordToDisplay,
         String wordToSpeak,
         String imagePath,
-        Integer row,
-        Integer column
+        Integer gridRow,
+        Integer gridColumn
         ) {
 }

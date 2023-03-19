@@ -28,19 +28,17 @@ public class CustomWord {
 
     private String imagePath;
 
-    private Integer row;
+    private Integer gridRow;
 
-    private Integer column;
+    private Integer gridColumn;
+
+    private GridTitleEnum gridTitleEnum;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    private LocalDateTime startTime;
-
-    private LocalDateTime endTime;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id", nullable = false)

@@ -24,8 +24,7 @@ public class CustomWordServiceImpl implements CustomWordService {
     @Override
     public Sentence post(@CurrentUsername String username, CustomWordRequest customWordRequest) {
 
-        // so the word that is saved now needs to be added wordToDisplay and wordToSpeak
-        //should add a new table
+        // can probably
         User user = userRepository.findByEmail(username).orElseThrow();
         CustomWord customWord = new CustomWord();
         /**
@@ -38,8 +37,8 @@ public class CustomWordServiceImpl implements CustomWordService {
         customWord.setWordToDisplay(customWordRequest.wordToDisplay());
         customWord.setWordToSpeak(customWordRequest.wordToSpeak());
         customWord.setImagePath(customWordRequest.imagePath());
-        customWord.setRow(customWordRequest.row());
-        customWord.setColumn(customWordRequest.column());
+        customWord.setGridRow(customWordRequest.gridRow());
+        customWord.setGridColumn(customWordRequest.gridColumn());
         customWord.setUser(user);
         customWordRepository.save(customWord);
 
