@@ -5,6 +5,7 @@ public record CustomWordRequest(
         String wordToSpeak,
         String imagePath,
         Integer gridRow,
-        Integer gridColumn
+        Integer gridColumn,
+        GridTitleEnum gridTitleEnum
         ) {
 }

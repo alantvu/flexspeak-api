@@ -31,6 +31,7 @@ public class CustomWordServiceImpl implements CustomWordService {
         customWord.setImagePath(customWordRequest.imagePath());
         customWord.setGridRow(customWordRequest.gridRow());
         customWord.setGridColumn(customWordRequest.gridColumn());
+        customWord.setGridTitleEnum(customWordRequest.gridTitleEnum());
         customWord.setUser(user);
         customWordRepository.save(customWord);
 
