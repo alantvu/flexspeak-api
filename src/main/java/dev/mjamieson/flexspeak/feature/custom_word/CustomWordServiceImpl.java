@@ -9,6 +9,8 @@ import dev.mjamieson.flexspeak.feature.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CustomWordServiceImpl implements CustomWordService {
@@ -36,5 +38,11 @@ public class CustomWordServiceImpl implements CustomWordService {
         customWordRepository.save(customWord);
 
         return null;
+    }
+
+    @Override
+    public List<CustomWord> get(@CurrentUsername String username) {
+        User user = userRepository.findByEmail(username).orElseThrow();
+        return customWordRepository.findByUser(user);
     }
 }

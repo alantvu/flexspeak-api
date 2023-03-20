@@ -1,6 +1,7 @@
 package dev.mjamieson.flexspeak.feature.user;
 
 import dev.mjamieson.flexspeak.feature.aac.AAC_Repository;
+import dev.mjamieson.flexspeak.feature.custom_word.CustomWordRepository;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final AAC_Repository aac_repository;
+    private final CustomWordRepository customWordRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -50,6 +52,7 @@ public class UserServiceImpl implements UserService {
         // Delete user
         User user = userRepository.findByEmail(email).orElseThrow();
         aac_repository.deleteByUser(user);
+        customWordRepository.deleteByUser(user);
         userRepository.delete(user);
         return null;
     }
