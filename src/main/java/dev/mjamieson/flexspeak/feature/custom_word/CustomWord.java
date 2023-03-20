@@ -1,12 +1,14 @@
 package dev.mjamieson.flexspeak.feature.custom_word;
 
 import dev.mjamieson.flexspeak.feature.user.User;
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -32,6 +34,9 @@ public class CustomWord {
 
     private Integer gridColumn;
 
+//    @Convert(converter = GridTitleEnumConverter.class)
+    @Enumerated(EnumType.STRING)
+    @Type(PostgreSQLEnumType.class)
     private GridTitleEnum gridTitleEnum;
 
     @CreationTimestamp
