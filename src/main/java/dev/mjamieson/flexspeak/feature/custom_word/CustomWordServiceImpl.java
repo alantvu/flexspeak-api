@@ -22,7 +22,7 @@ public class CustomWordServiceImpl implements CustomWordService {
 
 
     @Override
-    public Sentence post(@CurrentUsername String username, CustomWordRequest customWordRequest) {
+    public Void post(@CurrentUsername String username, CustomWordRequest customWordRequest) {
 
         User user = userRepository.findByEmail(username).orElseThrow();
         CustomWord customWord = new CustomWord();
@@ -35,8 +35,6 @@ public class CustomWordServiceImpl implements CustomWordService {
         customWord.setUser(user);
         customWordRepository.save(customWord);
 
-        return Sentence.builder()
-                .sentence("daksdjsj")
-                .build();
+        return null;
     }
 }

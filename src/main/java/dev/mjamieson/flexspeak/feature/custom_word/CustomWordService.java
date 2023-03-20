@@ -6,5 +6,5 @@ import dev.mjamieson.flexspeak.feature.model.Sentence;
 
 public interface CustomWordService {
 
-    Sentence post(@CurrentUsername String username, CustomWordRequest customWordRequest);
+    Void post(@CurrentUsername String username, CustomWordRequest customWordRequest);
 }

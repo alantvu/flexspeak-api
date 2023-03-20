@@ -19,7 +19,7 @@ public class CustomWordController {
     private final CustomWordService customWordService;
 
     @PostMapping()
-    public ResponseEntity<Sentence> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CustomWordRequest customWordRequest) {
+    public ResponseEntity<Void> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CustomWordRequest customWordRequest) {
         return new ResponseEntity<>(customWordService.post(userDetails.getUsername(), customWordRequest),
                 HttpStatus.CREATED
         );
