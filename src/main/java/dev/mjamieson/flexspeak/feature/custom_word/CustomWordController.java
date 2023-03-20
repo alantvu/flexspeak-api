@@ -16,14 +16,14 @@ import java.util.List;
 public class CustomWordController {
     private final CustomWordService customWordService;
     @PostMapping()
-    public ResponseEntity<Void> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CustomWordRequest customWordRequest) {
-        return new ResponseEntity<>(customWordService.post(userDetails.getUsername(), customWordRequest),
+    public ResponseEntity<Void> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CustomWordDTO customWordDTO) {
+        return new ResponseEntity<>(customWordService.post(userDetails.getUsername(), customWordDTO),
                 HttpStatus.CREATED
         );
     }
     @GetMapping()
-    public ResponseEntity<List<CustomWord>> get(@AuthenticationPrincipal UserDetails userDetails){
-        List<CustomWord> customWords = customWordService.get(userDetails.getUsername());
+    public ResponseEntity<List<CustomWordDTO>> get(@AuthenticationPrincipal UserDetails userDetails){
+        List<CustomWordDTO> customWords = customWordService.get(userDetails.getUsername());
         return ResponseEntity.ok(customWords);
     }
 }

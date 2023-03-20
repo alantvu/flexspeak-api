@@ -3,7 +3,6 @@ package dev.mjamieson.flexspeak.feature.custom_word;
 import dev.mjamieson.flexspeak.annotation.CurrentUsername;
 import dev.mjamieson.flexspeak.feature.aac.AAC_Service;
 import dev.mjamieson.flexspeak.feature.integration.flat_icon.service.our_api.FlatIconFacadeService;
-import dev.mjamieson.flexspeak.feature.model.Sentence;
 import dev.mjamieson.flexspeak.feature.user.User;
 import dev.mjamieson.flexspeak.feature.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,16 +23,16 @@ public class CustomWordServiceImpl implements CustomWordService {
 
 
     @Override
-    public Void post(@CurrentUsername String username, CustomWordRequest customWordRequest) {
+    public Void post(@CurrentUsername String username, CustomWordDTO customWordDTO) {
 
         User user = userRepository.findByEmail(username).orElseThrow();
         CustomWord customWord = new CustomWord();
-        customWord.setWordToDisplay(customWordRequest.wordToDisplay());
-        customWord.setWordToSpeak(customWordRequest.wordToSpeak());
-        customWord.setImagePath(customWordRequest.imagePath());
-        customWord.setGridRow(customWordRequest.gridRow());
-        customWord.setGridColumn(customWordRequest.gridColumn());
-        customWord.setGridTitleEnum(customWordRequest.gridTitleEnum());
+        customWord.setWordToDisplay(customWordDTO.wordToDisplay());
+        customWord.setWordToSpeak(customWordDTO.wordToSpeak());
+        customWord.setImagePath(customWordDTO.imagePath());
+        customWord.setGridRow(customWordDTO.gridRow());
+        customWord.setGridColumn(customWordDTO.gridColumn());
+        customWord.setGridTitleEnum(customWordDTO.gridTitleEnum());
         customWord.setUser(user);
         customWordRepository.save(customWord);
 
@@ -41,8 +40,9 @@ public class CustomWordServiceImpl implements CustomWordService {
     }
 
     @Override
-    public List<CustomWord> get(@CurrentUsername String username) {
+    public List<CustomWordDTO> get(@CurrentUsername String username) {
         User user = userRepository.findByEmail(username).orElseThrow();
-        return customWordRepository.findByUser(user);
+        List<CustomWord> customWordByUser = customWordRepository.findByUser(user);
+        return CustomWordDTO.from(customWordByUser);
     }
 }
