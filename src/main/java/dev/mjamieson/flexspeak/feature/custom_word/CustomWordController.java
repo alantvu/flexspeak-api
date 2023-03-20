@@ -1,7 +1,5 @@
 package dev.mjamieson.flexspeak.feature.custom_word;
 
-import dev.mjamieson.flexspeak.feature.model.Sentence;
-import dev.mjamieson.flexspeak.feature.user.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
