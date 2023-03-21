@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -26,15 +27,30 @@ public class CustomWordServiceImpl implements CustomWordService {
     public Void post(@CurrentUsername String username, CustomWordDTO customWordDTO) {
 
         User user = userRepository.findByEmail(username).orElseThrow();
-        CustomWord customWord = new CustomWord();
-        customWord.setWordToDisplay(customWordDTO.wordToDisplay());
-        customWord.setWordToSpeak(customWordDTO.wordToSpeak());
-        customWord.setImagePath(customWordDTO.imagePath());
-        customWord.setGridRow(customWordDTO.gridRow());
-        customWord.setGridColumn(customWordDTO.gridColumn());
-        customWord.setGridTitleEnum(customWordDTO.gridTitleEnum());
-        customWord.setUser(user);
-        customWordRepository.save(customWord);
+
+        CustomWord customWordExists = customWordRepository.findByUserAndGridColumnAndGridRowAndGridTitleEnum(
+                user,
+                customWordDTO.gridColumn(),
+                customWordDTO.gridRow(),
+                customWordDTO.gridTitleEnum()
+        );
+        if (Objects.nonNull(customWordExists)) {
+            if(Objects.nonNull(customWordDTO.wordToDisplay())) customWordExists.setWordToDisplay(customWordDTO.wordToDisplay());
+            if(Objects.nonNull(customWordDTO.wordToSpeak())) customWordExists.setWordToSpeak(customWordDTO.wordToSpeak());
+            if(Objects.nonNull(customWordDTO.gridTitleEnum())) customWordExists.setGridTitleEnum(customWordDTO.gridTitleEnum());
+            customWordRepository.save(customWordExists);
+        } else {
+            CustomWord customWord = new CustomWord();
+            customWord.setWordToDisplay(customWordDTO.wordToDisplay());
+            customWord.setWordToSpeak(customWordDTO.wordToSpeak());
+            customWord.setImagePath(customWordDTO.imagePath());
+            customWord.setGridRow(customWordDTO.gridRow());
+            customWord.setGridColumn(customWordDTO.gridColumn());
+            customWord.setGridTitleEnum(customWordDTO.gridTitleEnum());
+            customWord.setUser(user);
+            customWordRepository.save(customWord);
+        }
+
 
         return null;
     }

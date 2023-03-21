@@ -34,7 +34,6 @@ public class CustomWord {
 
     private Integer gridColumn;
 
-//    @Convert(converter = GridTitleEnumConverter.class)
     @Enumerated(EnumType.STRING)
     @Type(PostgreSQLEnumType.class)
     private GridTitleEnum gridTitleEnum;

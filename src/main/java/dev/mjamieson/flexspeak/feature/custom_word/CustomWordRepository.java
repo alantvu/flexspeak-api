@@ -8,4 +8,5 @@ import java.util.List;
 public interface CustomWordRepository extends JpaRepository<CustomWord, Integer> {
     void deleteByUser(User user);
     List<CustomWord> findByUser(User user);
+    CustomWord findByUserAndGridColumnAndGridRowAndGridTitleEnum(User user, Integer gridColumn, Integer gridRow, GridTitleEnum gridTitleEnum);
 }
