@@ -19,6 +19,7 @@ public abstract class RequestAPIBindingBase implements RequestApiBindingInterfac
     @Override
     public void init() {
         this.httpHeaders = setHttpHeaders();
+        this.httpHeaders = setHttpHeaders();
     }
     @Override
     public <T> ResponseWrapper<T> makeRequest(URI uri, HttpMethod httpMethod, Class<T> returnClazz) {

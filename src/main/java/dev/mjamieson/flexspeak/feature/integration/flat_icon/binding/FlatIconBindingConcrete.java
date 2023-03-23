@@ -17,6 +17,7 @@ public class FlatIconBindingConcrete extends RequestAPIBindingBase implements Fl
     public FlatIconBindingConcrete(String apiURL,String apiKey) {
         this.apiURL = apiURL;
         this.apiKey = apiKey;
+        this.customAPIExecutor = createAPIExecutorService();
     }
     @Override
     public void init() {
