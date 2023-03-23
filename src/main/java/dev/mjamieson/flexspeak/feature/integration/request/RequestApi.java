@@ -14,7 +14,7 @@ public abstract class RequestApi {
     public static <T> ResponseWrapper<T> makeRequest(URI uri, HttpMethod httpMethod, HttpEntity httpEntity, Class<T> returnClazz) {
 
         RestTemplate restTemplate = new RestTemplate();
-        try{
+//        try{
 
         ResponseEntity<T> response = restTemplate.exchange(
                 uri,
@@ -26,11 +26,11 @@ public abstract class RequestApi {
             responseWrapper.setResponse(response.getBody());
 
             return responseWrapper;
-        }catch(HttpServerErrorException e){
+//        }catch(HttpServerErrorException e){
 //            e.getResponseBodyAsString();
-            throw new RuntimeException(e.getResponseBodyAsString());
+//            throw new RuntimeException(e.getResponseBodyAsString());
 
-        }
+//        }
 
     }
 }

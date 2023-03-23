@@ -34,6 +34,8 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
     @Autowired
     private WebTestClient webTestClient;
 
+
+
 //    @Autowired
 //    private JWTUtil jwtUtil;
 
@@ -44,6 +46,7 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
     private static final String AAC_PATH = "/aac";
     private static final String USER_PATH = "/user";
     private static final String OPEN_AI_PATH = "/open_ai";
+    private static final String FLAT_ICON_PATH = "/flat_icon";
 
     @Test
     void canLogin() {
@@ -132,7 +135,6 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .expectStatus()
                 .isCreated();
 
-
 //        webTestClient.post()
 //                .uri(OPEN_AI_PATH)
 //                .header("Authorization", "Bearer " + token)
@@ -150,14 +152,28 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .uri(USER_PATH)
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(
-//                        Mono.just(authenticationRequest),
-//                        AuthenticationRequest.class
-//                )
                 .exchange()
                 .expectStatus()
                 .isOk();
+
+        webTestClient
+                .method(HttpMethod.GET)
+                .uri(FLAT_ICON_PATH)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        webTestClient
+                .method(HttpMethod.GET)
+                .uri(FLAT_ICON_PATH)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
 
         webTestClient
                 .method(HttpMethod.DELETE)
