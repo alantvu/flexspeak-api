@@ -185,23 +185,32 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .expectStatus()
                 .isOk();
 
-//        webTestClient
-//                .method(HttpMethod.GET)
-//                .uri(FLAT_ICON_PATH)
-//                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .exchange()
-//                .expectStatus()
-//                .isOk();
-//
-//        webTestClient
-//                .method(HttpMethod.GET)
-//                .uri(FLAT_ICON_PATH)
-//                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .exchange()
-//                .expectStatus()
-//                .isOk();
+        webTestClient
+                .method(HttpMethod.GET)
+                .uri(FLAT_ICON_PATH)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        webTestClient
+                .method(HttpMethod.GET)
+                .uri(FLAT_ICON_PATH)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk();
+
+        webTestClient
+                .method(HttpMethod.GET)
+                .uri(FLAT_ICON_PATH)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk();
 
 
         webTestClient

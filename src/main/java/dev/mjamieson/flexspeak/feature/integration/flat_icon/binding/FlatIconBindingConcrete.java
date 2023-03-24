@@ -21,13 +21,16 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class FlatIconBindingConcrete extends RequestAPIBindingBase implements FlatIconBinding {
     private final String apiURL;
     private final String apiKey;
     private final Clock clock;
+//    private final static String version = "v3";
     private final String version = "v3";
     private FlatIconToken flatIconToken;
+
 
     public FlatIconBindingConcrete(String apiURL, String apiKey, Clock clock) {
         this.apiURL = apiURL;
@@ -91,26 +94,24 @@ public class FlatIconBindingConcrete extends RequestAPIBindingBase implements Fl
     }
 
     private void refreshTokenIfExpired() {
-        if (Objects.isNull(flatIconToken)){
+        if (Objects.isNull(flatIconToken)) {
             setAuthorizationToken();
             return;
         }
 
         long currentTime = Instant.now(clock).getEpochSecond();
         long tokenExpirationTime = flatIconToken.getExpires();
-//        long twentyFourHoursInSeconds = 24 * 60 * 60;
-        long twentyFourHoursInSeconds = 2;
 
-        if (tokenExpirationTime - currentTime < twentyFourHoursInSeconds) {
+        if (currentTime >= tokenExpirationTime) {
             setAuthorizationToken();
         }
     }
+
 
     private void setAuthorizationToken() {
         FlatIconToken authToken = postAuthToken();
         this.flatIconToken = authToken;
         this.httpHeaders.set(HttpHeaders.AUTHORIZATION, "Bearer " + authToken.getToken());
-
     }
 
     private FlatIconToken postAuthToken() {

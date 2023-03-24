@@ -4,6 +4,7 @@ package dev.mjamieson.flexspeak.feature.integration.flat_icon.service.external_a
 import dev.mjamieson.flexspeak.feature.integration.flat_icon.binding.FlatIconBinding;
 import dev.mjamieson.flexspeak.feature.integration.flat_icon.binding.FlatIconFactory;
 import dev.mjamieson.flexspeak.feature.integration.flat_icon.model.FlatIconApiKey;
+import dev.mjamieson.flexspeak.feature.integration.request.ResponseWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -20,15 +21,15 @@ public class FlatIconServiceImpl implements FlatIconService {
     @Override
 //    public List<SpaceXCapsule> getAllCapsules() {
     public List<Object> getAllBy() {
-        postAuth();
+//        postAuth();
 
-//        FlatIconBinding flatIconBinding = flatIconFactory.getAPIBinding();
-//        URI uri = UriComponentsBuilder
-//                .fromHttpUrl(flatIconBinding.getApiUrl())
-//                .pathSegment(version,"search", "icons")
-//                .queryParam("q","arrow")
-//                .build().toUri();
-//        ResponseWrapper<String> responseWrapper = flatIconBinding.makeRequest(uri, HttpMethod.GET, String.class);
+        FlatIconBinding flatIconBinding = flatIconFactory.getAPIBinding();
+        URI uri = UriComponentsBuilder
+                .fromHttpUrl(flatIconBinding.getApiUrl())
+                .pathSegment(version,"search", "icons")
+                .queryParam("q","arrow")
+                .build().toUri();
+        ResponseWrapper<String> responseWrapper = flatIconBinding.makeRequest(uri, HttpMethod.GET, String.class);
         return null;
     }
 
