@@ -36,8 +36,8 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
     @Autowired
     private WebTestClient webTestClient;
 
-//    @MockBean
-//    private Clock clock;
+    @MockBean
+    private Clock clock;
 
 //    @Autowired
 //    private JWTUtil jwtUtil;
@@ -75,7 +75,15 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 email,
                 password
         );
-//
+
+        Clock clockToMock = Clock.systemDefaultZone();
+//        Instant instant = Instant.now(clock);
+        Instant instant = Instant.now(clockToMock);
+
+        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
+        when(clock.instant()).thenReturn(instant);
+        when(clock.millis()).thenReturn(instant.toEpochMilli());
+
         webTestClient.post()
                 .uri(AUTHENTICATION_PATH)
                 .accept(MediaType.APPLICATION_JSON)
