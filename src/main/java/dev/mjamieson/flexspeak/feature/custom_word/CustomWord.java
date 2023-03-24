@@ -44,7 +44,7 @@ public class CustomWord {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne()
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

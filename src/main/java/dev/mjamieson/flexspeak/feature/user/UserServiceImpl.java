@@ -1,5 +1,6 @@
 package dev.mjamieson.flexspeak.feature.user;
 
+import dev.mjamieson.flexspeak.feature.aac.AAC;
 import dev.mjamieson.flexspeak.feature.aac.AAC_Repository;
 import dev.mjamieson.flexspeak.feature.custom_word.CustomWordRepository;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationRequest;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,6 +54,7 @@ public class UserServiceImpl implements UserService {
         // Delete user
         User user = userRepository.findByEmail(email).orElseThrow();
         aac_repository.deleteByUser(user);
+
         customWordRepository.deleteByUser(user);
         userRepository.delete(user);
         return null;

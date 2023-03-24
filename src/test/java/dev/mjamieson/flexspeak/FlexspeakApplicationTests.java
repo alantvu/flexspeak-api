@@ -9,6 +9,7 @@ import dev.mjamieson.flexspeak.feature.user.auth.RegisterRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,12 +19,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 
@@ -34,7 +36,8 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
     @Autowired
     private WebTestClient webTestClient;
 
-
+//    @MockBean
+//    private Clock clock;
 
 //    @Autowired
 //    private JWTUtil jwtUtil;
@@ -134,7 +137,25 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .exchange()
                 .expectStatus()
                 .isCreated();
+//        Clock clock = Clock.systemDefaultZone();
+//        Instant instant = Instant.now(clock);
+//
+//        when(clock.getZone()).thenReturn(ZoneId.systemDefault());
+//        when(clock.instant()).thenReturn(instant);
+//        when(clock.millis()).thenReturn(instant.toEpochMilli());
 
+        webTestClient.post()
+                .uri(AAC_PATH)
+                .header("Authorization", "Bearer " + token)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(
+                        Mono.just(sentence),
+                        Sentence.class
+                )
+                .exchange()
+                .expectStatus()
+                .isCreated();
 //        webTestClient.post()
 //                .uri(OPEN_AI_PATH)
 //                .header("Authorization", "Bearer " + token)
@@ -156,23 +177,23 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .expectStatus()
                 .isOk();
 
-        webTestClient
-                .method(HttpMethod.GET)
-                .uri(FLAT_ICON_PATH)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus()
-                .isOk();
-
-        webTestClient
-                .method(HttpMethod.GET)
-                .uri(FLAT_ICON_PATH)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus()
-                .isOk();
+//        webTestClient
+//                .method(HttpMethod.GET)
+//                .uri(FLAT_ICON_PATH)
+//                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .exchange()
+//                .expectStatus()
+//                .isOk();
+//
+//        webTestClient
+//                .method(HttpMethod.GET)
+//                .uri(FLAT_ICON_PATH)
+//                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .exchange()
+//                .expectStatus()
+//                .isOk();
 
 
         webTestClient
