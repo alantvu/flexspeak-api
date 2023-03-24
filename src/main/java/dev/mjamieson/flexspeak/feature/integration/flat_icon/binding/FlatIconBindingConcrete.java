@@ -25,9 +25,7 @@ import java.util.concurrent.Executors;
 public class FlatIconBindingConcrete extends RequestAPIBindingBase implements FlatIconBinding {
     private final String apiURL;
     private final String apiKey;
-
     private final Clock clock;
-
     private final String version = "v3";
     private FlatIconToken flatIconToken;
 
@@ -41,7 +39,7 @@ public class FlatIconBindingConcrete extends RequestAPIBindingBase implements Fl
     @Override
     public void init() {
         super.init();
-        setAuthorizationToken();
+//        setAuthorizationToken();
     }
 
     @Override
