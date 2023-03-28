@@ -2,10 +2,12 @@ package dev.mjamieson.flexspeak.feature.custom_word;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 
@@ -15,9 +17,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomWordController {
     private final CustomWordService customWordService;
-    @PostMapping()
-    public ResponseEntity<Void> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CustomWordDTO customWordDTO) {
-        return new ResponseEntity<>(customWordService.post(userDetails.getUsername(), customWordDTO),
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> create(@AuthenticationPrincipal UserDetails userDetails,
+                                       MultipartHttpServletRequest request) {
+        return new ResponseEntity<>(customWordService.post(userDetails.getUsername(), request),
                 HttpStatus.CREATED
         );
     }

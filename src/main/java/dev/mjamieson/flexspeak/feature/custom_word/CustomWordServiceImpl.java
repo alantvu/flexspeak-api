@@ -1,12 +1,16 @@
 package dev.mjamieson.flexspeak.feature.custom_word;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.mjamieson.flexspeak.annotation.CurrentUsername;
 import dev.mjamieson.flexspeak.feature.aac.AAC_Service;
 import dev.mjamieson.flexspeak.feature.integration.flat_icon.service.our_api.FlatIconFacadeService;
 import dev.mjamieson.flexspeak.feature.user.User;
 import dev.mjamieson.flexspeak.feature.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,11 +26,21 @@ public class CustomWordServiceImpl implements CustomWordService {
 
     private final UserRepository userRepository;
 
+    static final String FILE = "file";
+    static final String ANY_FILE = "anyFile";
+    static final String METADATA_PARAMETER_NAME = "metadata";
 
     @Override
-    public Void post(@CurrentUsername String username, CustomWordDTO customWordDTO) {
+    @SneakyThrows
+    public Void post(@CurrentUsername String username, MultipartHttpServletRequest request) {
 
         User user = userRepository.findByEmail(username).orElseThrow();
+        String jsonMetadata = request.getParameter(METADATA_PARAMETER_NAME);
+        final ObjectMapper objectMapper = new ObjectMapper();
+        CustomWordDTO customWordDTO = objectMapper.readValue(jsonMetadata, CustomWordDTO.class);
+
+        MultipartFile imageMultipartFile = request.getFile(FILE); // image
+        MultipartFile anyMultipartFile = request.getFile(ANY_FILE); // any file
 
         CustomWord customWordExists = customWordRepository.findByUserAndGridColumnAndGridRowAndGridTitleEnum(
                 user,
