@@ -29,6 +29,13 @@ public class CustomWordJPADataAccessServiceImpl implements CustomWordDAO {
         else createCustomWord(customWordDTO,user);
 
     }
+    @Override
+    public List<CustomWordDTO> get(@CurrentUsername String username) {
+        User user = userRepository.findByEmail(username).orElseThrow();
+        List<CustomWord> customWordByUser = customWordRepository.findByUser(user);
+        return CustomWordDTO.from(customWordByUser);
+    }
+
     private void updateCustomWord(CustomWord customWordExists, CustomWordDTO customWordDTO){
         if(Objects.nonNull(customWordDTO.wordToDisplay())) customWordExists.setWordToDisplay(customWordDTO.wordToDisplay());
         if(Objects.nonNull(customWordDTO.wordToSpeak())) customWordExists.setWordToSpeak(customWordDTO.wordToSpeak());
@@ -48,12 +55,6 @@ public class CustomWordJPADataAccessServiceImpl implements CustomWordDAO {
         customWordRepository.save(customWord);
     }
 
-    @Override
-    public List<CustomWordDTO> get(@CurrentUsername String username) {
-        User user = userRepository.findByEmail(username).orElseThrow();
-        List<CustomWord> customWordByUser = customWordRepository.findByUser(user);
-        return CustomWordDTO.from(customWordByUser);
-    }
 
 
 }

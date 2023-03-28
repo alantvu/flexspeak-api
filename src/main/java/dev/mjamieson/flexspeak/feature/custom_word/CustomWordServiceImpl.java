@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class CustomWordServiceImpl implements CustomWordService {
     @Qualifier("jpa")
     private final CustomWordDAO customWordDAO;
 
-    static final String FILE = "file";
+    static final String IMAGE_FILE = "image";
     static final String METADATA_PARAMETER_NAME = "metadata";
 
     @Override
@@ -33,10 +34,10 @@ public class CustomWordServiceImpl implements CustomWordService {
         final ObjectMapper objectMapper = new ObjectMapper();
         CustomWordDTO customWordDTO = objectMapper.readValue(jsonMetadata, CustomWordDTO.class);
 
-        MultipartFile imageMultipartFile = request.getFile(FILE); // image
+        MultipartFile imageMultipartFile = request.getFile(IMAGE_FILE); // image
 
-        customWordDAO.save(username,customWordDTO);
-
+        if (Objects.nonNull(imageMultipartFile)) saveCustomWordAndImage(imageMultipartFile,username,customWordDTO);
+        else customWordDAO.save(username,customWordDTO);
 
         return null;
     }
@@ -51,5 +52,17 @@ public class CustomWordServiceImpl implements CustomWordService {
         if (multipartFile.getBytes().length < 0) throw new GeneralMessageException("Something is wrong with a file you uploaded");
         amazonS3StorageService.store(multipartFile.getBytes(), finalFileName);
     }
+
+    private void saveCustomWordAndImage(MultipartFile multipartFile,@CurrentUsername String username, CustomWordDTO customWordDTO){
+        String fileName = createFileName(multipartFile);
+        storeInS3Bucket(multipartFile,fileName);
+        customWordDAO.save(username,CustomWordDTO.fromWithImagePath(customWordDTO,fileName));
+    };
+
+    private String createFileName(MultipartFile multipartFile) {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString().replace("-", "") + multipartFile.getOriginalFilename();
+    }
+
 
 }

@@ -21,6 +21,17 @@ public record CustomWordDTO(
                 customWord.getGridTitleEnum()
         );
     }
+
+    public static CustomWordDTO fromWithImagePath(CustomWordDTO customWordDTO, String imagePath) {
+        return new CustomWordDTO(
+                customWordDTO.wordToDisplay(),
+                customWordDTO.wordToSpeak(),
+                imagePath,
+                customWordDTO.gridRow(),
+                customWordDTO.gridColumn(),
+                customWordDTO.gridTitleEnum()
+        );
+    }
     public static List<CustomWordDTO> from(List<CustomWord> customWords) {
         return customWords.stream().map(CustomWordDTO::from).collect(Collectors.toList());
     }
