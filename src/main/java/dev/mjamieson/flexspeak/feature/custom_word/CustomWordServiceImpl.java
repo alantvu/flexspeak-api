@@ -37,7 +37,7 @@ public class CustomWordServiceImpl implements CustomWordService {
         MultipartFile imageMultipartFile = request.getFile(IMAGE_FILE); // image
 //        String imageMultipartFile = request.getParameter(IMAGE_FILE); // image
 
-//        if (Objects.nonNull(imageMultipartFile)) saveCustomWordAndImage(imageMultipartFile,username,customWordDTO);
+        if (Objects.nonNull(imageMultipartFile)) saveCustomWordAndImage(imageMultipartFile,username,customWordDTO);
 //        else customWordDAO.save(username,customWordDTO);
 
         return null;
@@ -57,12 +57,12 @@ public class CustomWordServiceImpl implements CustomWordService {
     private void saveCustomWordAndImage(MultipartFile multipartFile,@CurrentUsername String username, CustomWordDTO customWordDTO){
         String fileName = createFileName(multipartFile);
         storeInS3Bucket(multipartFile,fileName);
-        customWordDAO.save(username,CustomWordDTO.fromWithImagePath(customWordDTO,fileName));
+//        customWordDAO.save(username,CustomWordDTO.fromWithImagePath(customWordDTO,fileName));
     };
 
     private String createFileName(MultipartFile multipartFile) {
         UUID uuid = UUID.randomUUID();
-        return uuid.toString().replace("-", "") + multipartFile.getOriginalFilename();
+        return uuid.toString().replace("-", "") + multipartFile.getOriginalFilename().replace("-","");
     }
 
 
