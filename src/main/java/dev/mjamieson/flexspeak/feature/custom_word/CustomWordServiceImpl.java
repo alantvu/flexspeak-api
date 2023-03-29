@@ -23,7 +23,7 @@ public class CustomWordServiceImpl implements CustomWordService {
     @Qualifier("jpa")
     private final CustomWordDAO customWordDAO;
 
-    static final String IMAGE_FILE = "image";
+    static final String IMAGE_FILE = "file";
     static final String METADATA_PARAMETER_NAME = "metadata";
 
     @Override
@@ -35,9 +35,10 @@ public class CustomWordServiceImpl implements CustomWordService {
         CustomWordDTO customWordDTO = objectMapper.readValue(jsonMetadata, CustomWordDTO.class);
 
         MultipartFile imageMultipartFile = request.getFile(IMAGE_FILE); // image
+//        String imageMultipartFile = request.getParameter(IMAGE_FILE); // image
 
-        if (Objects.nonNull(imageMultipartFile)) saveCustomWordAndImage(imageMultipartFile,username,customWordDTO);
-        else customWordDAO.save(username,customWordDTO);
+//        if (Objects.nonNull(imageMultipartFile)) saveCustomWordAndImage(imageMultipartFile,username,customWordDTO);
+//        else customWordDAO.save(username,customWordDTO);
 
         return null;
     }
