@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,6 @@ public class CustomWordServiceImpl implements CustomWordService {
         CustomWordDTO customWordDTO = objectMapper.readValue(jsonMetadata, CustomWordDTO.class);
 
         MultipartFile imageMultipartFile = request.getFile(IMAGE_FILE); // image
-//        String imageMultipartFile = request.getParameter(IMAGE_FILE); // image
 
         if (Objects.nonNull(imageMultipartFile)) saveCustomWordAndImage(imageMultipartFile,username,customWordDTO);
         else customWordDAO.save(username,customWordDTO);
@@ -46,22 +46,15 @@ public class CustomWordServiceImpl implements CustomWordService {
 
     @Override
     public List<CustomWordDTO> get(@CurrentUsername String username) {
-
         List<CustomWord> customWords = customWordDAO.get(username);
         List<CustomWordDTO> customWordDTOS = customWords
-                .parallelStream()
-//                .filter(Objects::nonNull)
-                .map(this::getCustomWordDTOWithPresignedURL)
+                .stream()
+                .map(customWord -> Optional.ofNullable(customWord.getImagePath())
+                        .map(imagePath -> CustomWordDTO.fromWithImagePath(customWord, amazonS3StorageService.generatePresignedUrl(imagePath)))
+                        .orElseGet(() -> CustomWordDTO.from(customWord)))
                 .collect(Collectors.toList());
-//        List<String> generatePresignedUrls = amazonS3StorageService.generatePresignedUrls(imageNames);
-//        return customWordDTOS;
-        return customWordDTOS;
-    }
 
-    private CustomWordDTO getCustomWordDTOWithPresignedURL(CustomWord customWord) {
-        if(Objects.isNull(customWord.getImagePath())) return CustomWordDTO.from(customWord);
-        String generatePresignedUrl = amazonS3StorageService.generatePresignedUrl(customWord.getImagePath());
-        return CustomWordDTO.fromWithImagePath(customWord,generatePresignedUrl);
+        return customWordDTOS;
     }
 
     @SneakyThrows
