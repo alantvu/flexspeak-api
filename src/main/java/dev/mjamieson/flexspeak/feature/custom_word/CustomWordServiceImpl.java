@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +46,13 @@ public class CustomWordServiceImpl implements CustomWordService {
 
     @Override
     public List<CustomWordDTO> get(@CurrentUsername String username) {
-        return customWordDAO.get(username);
+
+        List<CustomWordDTO> customWordDTOS = customWordDAO.get(username);
+        List<String> imageNames = customWordDTOS
+                .stream()
+                .map(customWordDTO -> customWordDTO.imagePath())
+                .collect(Collectors.toList());
+        return null;
     }
 
     @SneakyThrows
