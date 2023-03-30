@@ -2,7 +2,6 @@ package dev.mjamieson.flexspeak;
 
 import dev.mjamieson.flexspeak.feature.model.Sentence;
 import dev.mjamieson.flexspeak.feature.model.Word;
-import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_Service;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationRequest;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationResponse;
 import dev.mjamieson.flexspeak.feature.user.auth.RegisterRequest;
@@ -14,6 +13,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -22,7 +22,6 @@ import reactor.core.publisher.Mono;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -52,7 +51,7 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
     private static final String FLAT_ICON_PATH = "/flat_icon";
 
     @Test
-    void canLogin() {
+    void integrationTests() {
         // Given
 // create registration customerRegistrationRequest
 //        Faker faker = new Faker();
