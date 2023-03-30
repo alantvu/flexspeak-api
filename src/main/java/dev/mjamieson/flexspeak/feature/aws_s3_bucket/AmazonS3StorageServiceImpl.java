@@ -30,13 +30,16 @@ public class AmazonS3StorageServiceImpl implements AmazonS3StorageService {
 	@Value("${aws.secretAccessKey}")
 	private String secretAccessKey;
 	private S3Client s3;
+	private Region region;
+	private StaticCredentialsProvider staticCredentialsProvider;
 
 	@Override
 	public void store(byte[] data, String fileName) throws IOException {
-		AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKeyId, secretAccessKey);
-		Region region = Region.US_EAST_1;
-		s3 = S3Client.builder().region(region).credentialsProvider(StaticCredentialsProvider.create(awsCreds)).build();
-		PutObjectRequest objectRequest = PutObjectRequest.builder().bucket(s3bucketName).key(fileName).build();
+		PutObjectRequest objectRequest = PutObjectRequest.builder()
+				.bucket(s3bucketName)
+				.key(fileName)
+				.contentDisposition("inline")
+				.build();
 		s3.putObject(objectRequest, RequestBody.fromBytes(data));
 	}
 
@@ -48,28 +51,24 @@ public class AmazonS3StorageServiceImpl implements AmazonS3StorageService {
 
 	@Override
 	public String generatePresignedUrl(String key) {
-		return generatePresignedUrls(List.of(key)).get(0);
+		S3Presigner presigner = S3Presigner.builder().region(region).credentialsProvider(staticCredentialsProvider).build();
+		GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(s3bucketName).key(key).build();
+		GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder().signatureDuration(Duration.ofSeconds(604800)).getObjectRequest(getObjectRequest).build();
+		PresignedGetObjectRequest presignedGetObjectRequest = presigner.presignGetObject(getObjectPresignRequest);
+		return presignedGetObjectRequest.url().toString();
 	}
 
 	public List<String> generatePresignedUrls(List<String> keys) {
-		AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKeyId, secretAccessKey);
-		Region region = Region.US_EAST_1;
-		S3Presigner presigner = S3Presigner.builder().region(region).credentialsProvider(StaticCredentialsProvider.create(awsCreds)).build();
-
-		return keys.stream()
-				.map(key -> {
-					GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(s3bucketName).key(key).build();
-					GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder().signatureDuration(Duration.ofMinutes(60)).getObjectRequest(getObjectRequest).build();
-					PresignedGetObjectRequest presignedGetObjectRequest = presigner.presignGetObject(getObjectPresignRequest);
-					return presignedGetObjectRequest.url().toString();
-				})
+		return keys.parallelStream()
+				.map(this::generatePresignedUrl)
 				.collect(Collectors.toList());
 	}
 
 	@PostConstruct
 	private void initAPI() {
 		AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKeyId, secretAccessKey);
-		Region region = Region.US_EAST_1;
-		s3 = S3Client.builder().region(region).credentialsProvider(StaticCredentialsProvider.create(awsCreds)).build();
+		region = Region.US_EAST_1;
+		staticCredentialsProvider = StaticCredentialsProvider.create(awsCreds);
+		s3 = S3Client.builder().region(region).credentialsProvider(staticCredentialsProvider).build();
 	}
 }

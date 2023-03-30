@@ -30,10 +30,10 @@ public class CustomWordJPADataAccessServiceImpl implements CustomWordDAO {
 
     }
     @Override
-    public List<CustomWordDTO> get(@CurrentUsername String username) {
+    public List<CustomWord> get(@CurrentUsername String username) {
         User user = userRepository.findByEmail(username).orElseThrow();
         List<CustomWord> customWordByUser = customWordRepository.findByUser(user);
-        return CustomWordDTO.from(customWordByUser);
+        return customWordByUser;
     }
 
     private void updateCustomWord(CustomWord customWordExists, CustomWordDTO customWordDTO){

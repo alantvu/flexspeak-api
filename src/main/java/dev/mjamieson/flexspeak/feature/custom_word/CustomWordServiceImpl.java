@@ -47,12 +47,21 @@ public class CustomWordServiceImpl implements CustomWordService {
     @Override
     public List<CustomWordDTO> get(@CurrentUsername String username) {
 
-        List<CustomWordDTO> customWordDTOS = customWordDAO.get(username);
-        List<String> imageNames = customWordDTOS
-                .stream()
-                .map(customWordDTO -> customWordDTO.imagePath())
+        List<CustomWord> customWords = customWordDAO.get(username);
+        List<CustomWordDTO> customWordDTOS = customWords
+                .parallelStream()
+//                .filter(Objects::nonNull)
+                .map(this::getCustomWordDTOWithPresignedURL)
                 .collect(Collectors.toList());
-        return null;
+//        List<String> generatePresignedUrls = amazonS3StorageService.generatePresignedUrls(imageNames);
+//        return customWordDTOS;
+        return customWordDTOS;
+    }
+
+    private CustomWordDTO getCustomWordDTOWithPresignedURL(CustomWord customWord) {
+        if(Objects.isNull(customWord.getImagePath())) return CustomWordDTO.from(customWord);
+        String generatePresignedUrl = amazonS3StorageService.generatePresignedUrl(customWord.getImagePath());
+        return CustomWordDTO.fromWithImagePath(customWord,generatePresignedUrl);
     }
 
     @SneakyThrows

@@ -7,5 +7,5 @@ import java.util.List;
 public interface CustomWordDAO {
     void save(@CurrentUsername String username, CustomWordDTO customWordDTO);
 
-    List<CustomWordDTO> get(@CurrentUsername String username);
+    List<CustomWord> get(@CurrentUsername String username);
 }

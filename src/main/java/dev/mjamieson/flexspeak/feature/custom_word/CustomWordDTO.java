@@ -21,6 +21,16 @@ public record CustomWordDTO(
                 customWord.getGridTitleEnum()
         );
     }
+   public static CustomWordDTO fromWithImagePath(CustomWord customWord, String imagePath) {
+        return new CustomWordDTO(
+                customWord.getWordToDisplay(),
+                customWord.getWordToSpeak(),
+                imagePath,
+                customWord.getGridRow(),
+                customWord.getGridColumn(),
+                customWord.getGridTitleEnum()
+        );
+    }
 
     public static CustomWordDTO fromWithImagePath(CustomWordDTO customWordDTO, String imagePath) {
         return new CustomWordDTO(
