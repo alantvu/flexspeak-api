@@ -40,6 +40,7 @@ public class CustomWordJPADataAccessServiceImpl implements CustomWordDAO {
         if(Objects.nonNull(customWordDTO.wordToDisplay())) customWordExists.setWordToDisplay(customWordDTO.wordToDisplay());
         if(Objects.nonNull(customWordDTO.wordToSpeak())) customWordExists.setWordToSpeak(customWordDTO.wordToSpeak());
         if(Objects.nonNull(customWordDTO.gridTitleEnum())) customWordExists.setGridTitleEnum(customWordDTO.gridTitleEnum());
+        if(Objects.nonNull(customWordDTO.imagePath())) customWordExists.setImagePath(customWordDTO.imagePath());
         customWordRepository.save(customWordExists);
     }
 
