@@ -120,7 +120,7 @@
             <resource>
                 <directory>${basedir}</directory>
                 <includes>
-                    <include>.platform/**</include>
+                    <include>.ebextensions/**</include>
                 </includes>
                 <targetPath>${project.build.outputDirectory}</targetPath>
             </resource>
