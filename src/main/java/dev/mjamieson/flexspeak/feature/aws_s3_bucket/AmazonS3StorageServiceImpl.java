@@ -52,14 +52,21 @@ public class AmazonS3StorageServiceImpl implements AmazonS3StorageService {
 	@Override
 	public String generatePresignedUrl(String key) {
 		S3Presigner presigner = S3Presigner.builder().region(region).credentialsProvider(staticCredentialsProvider).build();
-		GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(s3bucketName).key(key).build();
-		GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder().signatureDuration(Duration.ofSeconds(604800)).getObjectRequest(getObjectRequest).build();
+		GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+				.bucket(s3bucketName)
+				.key(key)
+				.responseContentDisposition("inline")
+				.build();
+		GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder()
+				.signatureDuration(Duration.ofSeconds(604800))
+				.getObjectRequest(getObjectRequest)
+				.build();
 		PresignedGetObjectRequest presignedGetObjectRequest = presigner.presignGetObject(getObjectPresignRequest);
 		return presignedGetObjectRequest.url().toString();
 	}
 
 	public List<String> generatePresignedUrls(List<String> keys) {
-		return keys.parallelStream()
+		return keys.stream()
 				.map(this::generatePresignedUrl)
 				.collect(Collectors.toList());
 	}
