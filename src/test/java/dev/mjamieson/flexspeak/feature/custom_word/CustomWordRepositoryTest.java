@@ -26,6 +26,7 @@ class CustomWordRepositoryTest extends AbstractTestContainers {
     @BeforeEach
     void setUp() {
         underTest.deleteAll();
+        userRepository.deleteAll();
         testUser = userRepository.save(createRandomUser());
     }
 
