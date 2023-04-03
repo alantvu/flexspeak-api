@@ -21,6 +21,7 @@ class CustomWordRepositoryTest extends AbstractTestContainers {
     @Autowired
     private UserRepository userRepository;
 
+
     private User testUser;
 
     @BeforeEach
