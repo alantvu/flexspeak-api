@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AmazonS3StorageServiceImpl implements AmazonS3StorageService {
+public class AmazonS3StorageServiceImpl implements AmazonS3StorageService, AmazonS3RequestFactory {
 
 	private final AmazonS3Configuration amazonS3Configuration;
 	private final S3Client s3Client;
@@ -49,22 +49,30 @@ public class AmazonS3StorageServiceImpl implements AmazonS3StorageService {
 
 	@Override
 	public String generatePresignedUrl(String key) {
-		GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-				.bucket(amazonS3Configuration.getS3bucketName())
-				.key(key)
-				.responseContentDisposition("inline")
-				.build();
-		GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder()
-				.signatureDuration(Duration.ofSeconds(604800))
-				.getObjectRequest(getObjectRequest)
-				.build();
+		GetObjectRequest getObjectRequest = createGetObjectRequest(key);
+		GetObjectPresignRequest getObjectPresignRequest = createGetObjectPresignRequest(getObjectRequest);
 		PresignedGetObjectRequest presignedGetObjectRequest = s3Presigner.presignGetObject(getObjectPresignRequest);
 		return presignedGetObjectRequest.url().toString();
 	}
-
+	@Override
 	public List<String> generatePresignedUrls(List<String> keys) {
 		return keys.stream()
 				.map(this::generatePresignedUrl)
 				.collect(Collectors.toList());
+	}
+	@Override
+	public GetObjectRequest createGetObjectRequest(String key) {
+		return GetObjectRequest.builder()
+				.bucket(amazonS3Configuration.getS3bucketName())
+				.key(key)
+				.responseContentDisposition("inline")
+				.build();
+	}
+	@Override
+	public GetObjectPresignRequest createGetObjectPresignRequest(GetObjectRequest getObjectRequest) {
+		return GetObjectPresignRequest.builder()
+				.signatureDuration(Duration.ofSeconds(604800))
+				.getObjectRequest(getObjectRequest)
+				.build();
 	}
 }

@@ -1,6 +1,7 @@
 package dev.mjamieson.flexspeak.feature.aws_s3_bucket;
 
 import dev.mjamieson.flexspeak.config.AmazonS3Configuration;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
@@ -21,9 +23,11 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequ
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -42,21 +46,21 @@ class AmazonS3StorageServiceImplTest {
     @InjectMocks
     private AmazonS3StorageServiceImpl underTest;
 
+    @Mock
+    private AmazonS3RequestFactory amazonS3RequestFactory;
+
     @BeforeEach
-    void setUp() throws URISyntaxException {
-        // Set up the mock values for AmazonS3Configuration
-        when(amazonS3Configuration.getS3bucketName()).thenReturn("YOUR_BUCKET_NAME");
+    public void setUp() {
+        amazonS3Configuration = mock(AmazonS3Configuration.class);
+        s3Client = mock(S3Client.class);
+        s3Presigner = mock(S3Presigner.class);
+        underTest = new AmazonS3StorageServiceImpl(amazonS3Configuration, s3Client, s3Presigner);
 
-        // Set up mock behavior for s3Presigner
-//        PresignedGetObjectRequest presignedGetObjectRequest = PresignedGetObjectRequest.builder()
-//                .getObjectRequest(GetObjectRequest.builder().build())
-//                .signatureDuration(Duration.ofSeconds(604800))
-//                .url(new URI("https://example.com/presignedUrl"))
-//                .build();
-//
-//        when(s3Presigner.presignGetObject(any(GetObjectPresignRequest.class))).thenReturn(presignedGetObjectRequest);
+        // Mock AmazonS3Configuration values
+        lenient().when(amazonS3Configuration.getS3bucketName()).thenReturn("test-bucket");
+        lenient().when(amazonS3Configuration.getAccessKeyId()).thenReturn("test-access-key-id");
+        lenient().when(amazonS3Configuration.getSecretAccessKey()).thenReturn("test-secret-access-key");
     }
-
 
     @Test
     void store() throws IOException {
@@ -83,29 +87,56 @@ class AmazonS3StorageServiceImplTest {
         verify(s3Client, times(1)).deleteObject(any(DeleteObjectRequest.class));
     }
 
+
+
+    @SneakyThrows
     @Test
-    @Disabled
     void generatePresignedUrl() {
         // Given
         String key = "test-file.txt";
+        GetObjectRequest getObjectRequest = underTest.createGetObjectRequest(key);
+        GetObjectPresignRequest getObjectPresignRequest = underTest.createGetObjectPresignRequest(getObjectRequest);
+        PresignedGetObjectRequest presignedGetObjectRequest = mock(PresignedGetObjectRequest.class);
+//
+        when(s3Presigner.presignGetObject(getObjectPresignRequest)).thenReturn(presignedGetObjectRequest);
+        URI uri = URI.create("https://example.com/presignedUrl");
+        URL url = uri.toURL();
+        when(presignedGetObjectRequest.url()).thenReturn(url);
 
         // When
-        underTest.generatePresignedUrl(key);
+        String result = underTest.generatePresignedUrl(key);
 
         // Then
-        verify(s3Presigner, times(1)).presignGetObject(any(GetObjectPresignRequest.class));
+        assertEquals("https://example.com/presignedUrl", result);
     }
 
+    @SneakyThrows
     @Test
-    @Disabled
     void generatePresignedUrls() {
         // Given
         List<String> keys = List.of("file1.txt", "file2.txt");
 
+        // Mock presignedGetObjectRequest
+        PresignedGetObjectRequest presignedGetObjectRequest1 = mock(PresignedGetObjectRequest.class);
+        PresignedGetObjectRequest presignedGetObjectRequest2 = mock(PresignedGetObjectRequest.class);
+
+        // Mock presigned URLs
+        URI uri1 = URI.create("https://example.com/presignedUrl1");
+        URL url1 = uri1.toURL();
+        URI uri2 = URI.create("https://example.com/presignedUrl2");
+        URL url2 = uri2.toURL();
+
+        when(s3Presigner.presignGetObject(any(GetObjectPresignRequest.class)))
+                .thenReturn(presignedGetObjectRequest1, presignedGetObjectRequest2);
+        when(presignedGetObjectRequest1.url()).thenReturn(url1);
+        when(presignedGetObjectRequest2.url()).thenReturn(url2);
+
         // When
-        underTest.generatePresignedUrls(keys);
+        List<String> result = underTest.generatePresignedUrls(keys);
 
         // Then
-        verify(s3Presigner, times(2)).presignGetObject(any(GetObjectPresignRequest.class));
+        List<String> expectedUrls = List.of("https://example.com/presignedUrl1", "https://example.com/presignedUrl2");
+        assertEquals(expectedUrls, result);
     }
+
 }
