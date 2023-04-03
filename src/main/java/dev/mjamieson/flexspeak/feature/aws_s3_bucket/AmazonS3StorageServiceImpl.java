@@ -1,7 +1,8 @@
 package dev.mjamieson.flexspeak.feature.aws_s3_bucket;
 
+import dev.mjamieson.flexspeak.config.AmazonS3Configuration;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -21,39 +22,35 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AmazonS3StorageServiceImpl implements AmazonS3StorageService {
 
-	@Value("${aws.s3bucketName}")
-	private String s3bucketName;
-	@Value("${aws.accessKeyId}")
-	private String accessKeyId;
-	@Value("${aws.secretAccessKey}")
-	private String secretAccessKey;
-	private S3Client s3;
-	private Region region;
-	private StaticCredentialsProvider staticCredentialsProvider;
-
+	private final AmazonS3Configuration amazonS3Configuration;
+	private final S3Client s3Client;
+	private final S3Presigner s3Presigner;
 	@Override
 	public void store(byte[] data, String fileName) throws IOException {
 		PutObjectRequest objectRequest = PutObjectRequest.builder()
-				.bucket(s3bucketName)
+				.bucket(amazonS3Configuration.getS3bucketName())
 				.key(fileName)
 				.contentDisposition("inline")
 				.build();
-		s3.putObject(objectRequest, RequestBody.fromBytes(data));
+		s3Client.putObject(objectRequest, RequestBody.fromBytes(data));
 	}
 
 	@Override
 	public void delete(String key) throws IOException {
-		DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder().bucket(s3bucketName).key(key).build();
-		s3.deleteObject(deleteObjectRequest);
+		DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+				.bucket(amazonS3Configuration.getS3bucketName())
+				.key(key)
+				.build();
+		s3Client.deleteObject(deleteObjectRequest);
 	}
 
 	@Override
 	public String generatePresignedUrl(String key) {
-		S3Presigner presigner = S3Presigner.builder().region(region).credentialsProvider(staticCredentialsProvider).build();
 		GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-				.bucket(s3bucketName)
+				.bucket(amazonS3Configuration.getS3bucketName())
 				.key(key)
 				.responseContentDisposition("inline")
 				.build();
@@ -61,7 +58,7 @@ public class AmazonS3StorageServiceImpl implements AmazonS3StorageService {
 				.signatureDuration(Duration.ofSeconds(604800))
 				.getObjectRequest(getObjectRequest)
 				.build();
-		PresignedGetObjectRequest presignedGetObjectRequest = presigner.presignGetObject(getObjectPresignRequest);
+		PresignedGetObjectRequest presignedGetObjectRequest = s3Presigner.presignGetObject(getObjectPresignRequest);
 		return presignedGetObjectRequest.url().toString();
 	}
 
@@ -69,13 +66,5 @@ public class AmazonS3StorageServiceImpl implements AmazonS3StorageService {
 		return keys.stream()
 				.map(this::generatePresignedUrl)
 				.collect(Collectors.toList());
-	}
-
-	@PostConstruct
-	private void initAPI() {
-		AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKeyId, secretAccessKey);
-		region = Region.US_EAST_1;
-		staticCredentialsProvider = StaticCredentialsProvider.create(awsCreds);
-		s3 = S3Client.builder().region(region).credentialsProvider(staticCredentialsProvider).build();
 	}
 }

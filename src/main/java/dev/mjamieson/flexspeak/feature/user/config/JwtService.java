@@ -1,20 +1,14 @@
 package dev.mjamieson.flexspeak.feature.user.config;
 
-import dev.mjamieson.flexspeak.config.JWT_ConfigurationProperty;
+import dev.mjamieson.flexspeak.config.JWTConfiguration;
 import dev.mjamieson.flexspeak.feature.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -27,7 +21,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
     private final Clock clock;
-    private final JWT_ConfigurationProperty jwt_configurationProperty;
+    private final JWTConfiguration jwt_configurationProperty;
 
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();

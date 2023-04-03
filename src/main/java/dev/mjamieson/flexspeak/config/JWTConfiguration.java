@@ -14,7 +14,7 @@ import javax.crypto.SecretKey;
 @ConfigurationProperties(prefix = "jwt")
 @Component
 @Data
-public class JWT_ConfigurationProperty {
+public class JWTConfiguration {
     private SecretKey key;
     private String secret;
     private long accessTokenExpirationTime;
