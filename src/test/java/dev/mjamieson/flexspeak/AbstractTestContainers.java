@@ -1,5 +1,7 @@
 package dev.mjamieson.flexspeak;
 
+import dev.mjamieson.flexspeak.feature.user.Role;
+import dev.mjamieson.flexspeak.feature.user.User;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -8,6 +10,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import com.github.javafaker.Faker;
 
 @Testcontainers
 @TestPropertySource(properties = "spring.config.name:application,application-secret")
@@ -31,6 +34,18 @@ public abstract class AbstractTestContainers {
         registry.add("spring.datasource.url",postgreSQLContainer::getJdbcUrl);
         registry.add("spring.datasource.user",postgreSQLContainer::getUsername);
         registry.add("spring.datasource.password",postgreSQLContainer::getPassword);
+    }
+
+    protected static final Faker FAKER = new Faker();
+
+    protected User createRandomUser() {
+        return User.builder()
+                .firstname(FAKER.name().firstName())
+                .lastname(FAKER.name().lastName())
+                .email(FAKER.internet().emailAddress())
+                .password(FAKER.internet().password())
+                .role(Role.USER) // Or any other role defined in your Role enum
+                .build();
     }
 
 }
