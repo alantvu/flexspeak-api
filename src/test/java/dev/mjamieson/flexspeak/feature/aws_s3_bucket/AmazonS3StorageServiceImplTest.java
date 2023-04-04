@@ -46,9 +46,6 @@ class AmazonS3StorageServiceImplTest {
     @InjectMocks
     private AmazonS3StorageServiceImpl underTest;
 
-    @Mock
-    private AmazonS3RequestFactory amazonS3RequestFactory;
-
     @BeforeEach
     public void setUp() {
         amazonS3Configuration = mock(AmazonS3Configuration.class);

@@ -46,6 +46,7 @@ class CustomWordJPADataAccessServiceImplTest {
 
         // Then
         verify(customWordRepository, times(1)).save(any());
+        verify(userRepository, never()).deleteAll();//keep for reference perhaps will go through and ensure everything is 100% tested like this
     }
 
     @Test
