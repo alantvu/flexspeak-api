@@ -15,9 +15,15 @@ import org.springframework.web.bind.annotation.*;
 public class OpenAIController {
     private final OpenAI_Service openAI_service;
 
-    @PostMapping()
-    public ResponseEntity<Sentence> create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Sentence sentence) {
-        return new ResponseEntity<>(openAI_service.post(userDetails.getUsername(), sentence),
+    @PostMapping("/speech")
+    public ResponseEntity<Sentence> createSpeech(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Sentence sentence) {
+        return new ResponseEntity<>(openAI_service.postSpeech(userDetails.getUsername(), sentence),
+                HttpStatus.CREATED
+        );
+    }
+    @PostMapping("/suggestion")
+    public ResponseEntity<Sentence> createSuggestions(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Sentence sentence) {
+        return new ResponseEntity<>(openAI_service.postSpeech(userDetails.getUsername(), sentence),
                 HttpStatus.CREATED
         );
     }

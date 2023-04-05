@@ -164,7 +164,7 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .expectStatus()
                 .isCreated();
 //        webTestClient.post()
-//                .uri(OPEN_AI_PATH)
+//                .uri(OPEN_AI_PATH + "/speech")
 //                .header("Authorization", "Bearer " + token)
 //                .accept(MediaType.APPLICATION_JSON)
 //                .contentType(MediaType.APPLICATION_JSON)
@@ -175,6 +175,19 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
 //                .exchange()
 //                .expectStatus()
 //                .isOk();
+
+        webTestClient.post()
+                .uri(OPEN_AI_PATH + "/suggestion ")
+                .header("Authorization", "Bearer " + token)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(
+                        Mono.just(sentence),
+                        Sentence.class
+                )
+                .exchange()
+                .expectStatus()
+                .isOk();
 
         webTestClient.get()
                 .uri(USER_PATH)

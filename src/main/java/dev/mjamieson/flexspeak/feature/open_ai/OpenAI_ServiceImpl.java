@@ -30,7 +30,7 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
     }
 
     @Override
-    public Sentence post(@CurrentUsername String username, Sentence sentence) {
+    public Sentence postSpeech(@CurrentUsername String username, Sentence sentence) {
         aac_service.postSentence(username,sentence);
 
         String processedString = sentence.sentence()
