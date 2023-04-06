@@ -80,7 +80,9 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
         List<String> stopList = new ArrayList<String>();
         stopList.add("\n");
         CompletionRequest completionRequest = CompletionRequest.builder()
-                .prompt("Recommend topics:" + openAI_suggestionsDTO.openAI_Suggestions())
+                .prompt(
+                        "Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics:" +
+                               " USER INPUT: " + openAI_suggestionsDTO.openAI_Suggestions())
                 .echo(false)
                 .model("davinci")
                 .build();
