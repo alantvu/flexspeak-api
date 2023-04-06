@@ -2,6 +2,9 @@ package dev.mjamieson.flexspeak.feature.open_ai;
 
 import com.theokanning.openai.completion.CompletionChoice;
 import com.theokanning.openai.completion.CompletionRequest;
+import com.theokanning.openai.completion.chat.ChatCompletionChoice;
+import com.theokanning.openai.completion.chat.ChatCompletionRequest;
+import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.service.OpenAiService;
 import dev.mjamieson.flexspeak.feature.aac.AAC_Service;
 import dev.mjamieson.flexspeak.annotation.CurrentUsername;
@@ -79,19 +82,24 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
     private OpenAI_SuggestionsDTO callOpen_AI(OpenAI_SuggestionsDTO openAI_suggestionsDTO) {
         List<String> stopList = new ArrayList<String>();
         stopList.add("\n");
-        CompletionRequest completionRequest = CompletionRequest.builder()
-                .prompt(
-                        "Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics:" +
-                               " USER INPUT: " + openAI_suggestionsDTO.openAI_Suggestions())
-                .echo(false)
+
+        List<ChatMessage> chatMessages = new ArrayList<>();
+        chatMessages.add(new ChatMessage("user", "Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics: USER INPUT: " + openAI_suggestionsDTO.openAI_Suggestions()));
+
+        ChatCompletionRequest completionRequest = ChatCompletionRequest.builder()
+                .messages(chatMessages)
+//                .prompt(
+//                        "Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics:" +
+//                               " USER INPUT: " + openAI_suggestionsDTO.openAI_Suggestions())
+//                .echo(false)
 //                .model("davinci")
-//                .model("gpt-3.5-turbo")
-                .model("gpt-4")
+                .model("gpt-3.5-turbo")
+//                .model("gpt-4")
                 .build();
 
         try {
-            List<CompletionChoice> completionChoices = openAiService.createCompletion(completionRequest).getChoices();
-            String aiSentence = completionChoices.get(0).getText();
+            List<ChatCompletionChoice> completionChoices = openAiService.createChatCompletion(completionRequest).getChoices();
+            String aiSentence = completionChoices.get(0).toString();
             return new OpenAI_SuggestionsDTO(
                     openAI_suggestionsDTO.subject(),
                     aiSentence
