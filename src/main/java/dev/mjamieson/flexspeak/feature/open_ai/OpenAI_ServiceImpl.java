@@ -1,8 +1,8 @@
 package dev.mjamieson.flexspeak.feature.open_ai;
 
-import com.theokanning.openai.OpenAiService;
 import com.theokanning.openai.completion.CompletionChoice;
 import com.theokanning.openai.completion.CompletionRequest;
+import com.theokanning.openai.service.OpenAiService;
 import dev.mjamieson.flexspeak.feature.aac.AAC_Service;
 import dev.mjamieson.flexspeak.annotation.CurrentUsername;
 import dev.mjamieson.flexspeak.feature.model.Sentence;
@@ -84,7 +84,9 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
                         "Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics:" +
                                " USER INPUT: " + openAI_suggestionsDTO.openAI_Suggestions())
                 .echo(false)
-                .model("davinci")
+//                .model("davinci")
+//                .model("gpt-3.5-turbo")
+                .model("gpt-4")
                 .build();
 
         try {

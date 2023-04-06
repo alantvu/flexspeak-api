@@ -66,17 +66,18 @@
             <artifactId>client</artifactId>
             <version>0.12.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor -->
+
+        <!-- https://mvnrepository.com/artifact/com.theokanning.openai-gpt3-java/service -->
         <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>logging-interceptor</artifactId>
-            <version>4.10.0</version>
+            <groupId>com.theokanning.openai-gpt3-java</groupId>
+            <artifactId>service</artifactId>
+            <version>0.12.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-jackson -->
+        <!-- https://mvnrepository.com/artifact/com.theokanning.openai-gpt3-java/api -->
         <dependency>
-            <groupId>com.squareup.retrofit2</groupId>
-            <artifactId>converter-jackson</artifactId>
-            <version>2.9.0</version>
+            <groupId>com.theokanning.openai-gpt3-java</groupId>
+            <artifactId>api</artifactId>
+            <version>0.12.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.flywaydb/flyway-core s-->
         <dependency>
