@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,14 +24,15 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
 
     private OpenAiService openAiService;
     private final AAC_Service aac_service;
+
     @PostConstruct
-    private void initOpenAI(){
+    private void initOpenAI() {
         this.openAiService = new OpenAiService(apiKey);
     }
 
     @Override
     public Sentence postSpeech(@CurrentUsername String username, Sentence sentence) {
-        aac_service.postSentence(username,sentence);
+        aac_service.postSentence(username, sentence);
 
         String processedString = sentence.sentence()
                 .trim()
@@ -63,7 +65,33 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
     }
 
     @Override
-    public List<OpenAI_SuggestionsDTO> postSuggestion(String username, List<OpenAI_SuggestionsDTO>  openAI_suggestionsDTOS) {
-        return null;
+    public List<OpenAI_SuggestionsDTO> postSuggestion(String username, List<OpenAI_SuggestionsDTO> openAI_suggestionsDTOS) {
+
+        List<OpenAI_SuggestionsDTO> openAISuggestionsDTOS = openAI_suggestionsDTOS.stream()
+                .map(this::callOpen_AI)
+                .collect(Collectors.toList());
+        return openAISuggestionsDTOS;
+    }
+
+    private OpenAI_SuggestionsDTO callOpen_AI(OpenAI_SuggestionsDTO openAI_suggestionsDTO) {
+        List<String> stopList = new ArrayList<String>();
+        stopList.add("\n");
+        CompletionRequest completionRequest = CompletionRequest.builder()
+                .prompt("Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics:" + openAI_suggestionsDTO.openAI_Suggestions() )
+                .temperature(0.0)
+                .frequencyPenalty(1.57)
+                .maxTokens(20)
+                .topP(1.0)
+                .bestOf(1)
+//                .stop(stopList)
+                .echo(false)
+                .model("davinci")
+                .build();
+        List<CompletionChoice> completionChoices = openAiService.createCompletion(completionRequest).getChoices();
+        String aiSentence = completionChoices.get(0).getText();
+        return new OpenAI_SuggestionsDTO(
+                openAI_suggestionsDTO.subject(),
+                aiSentence
+        );
     }
 }
