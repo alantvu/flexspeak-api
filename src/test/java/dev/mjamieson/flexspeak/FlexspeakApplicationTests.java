@@ -2,7 +2,7 @@ package dev.mjamieson.flexspeak;
 
 import dev.mjamieson.flexspeak.feature.model.Sentence;
 import dev.mjamieson.flexspeak.feature.model.Word;
-import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_SuggestionsResponse;
+import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_SuggestionsDTO;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationRequest;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationResponse;
 import dev.mjamieson.flexspeak.feature.user.auth.RegisterRequest;
@@ -177,14 +177,11 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
 //                .expectStatus()
 //                .isOk();
 
-        // Create a list of suggestions
         List<String> suggestions = Arrays.asList("pizza", "sushi", "tacos", "burgers", "pasta");
 
 
-        // Create an instance of OpenAI_SuggestionsDTO with the suggestions list
-        OpenAI_SuggestionsResponse openAI_SuggestionsDTO = new OpenAI_SuggestionsResponse(suggestions);
+        OpenAI_SuggestionsDTO openAI_SuggestionsDTO = new OpenAI_SuggestionsDTO("food","vietnam food");
 
-        // ...
 
         // Pass the OpenAI_SuggestionsDTO instance to the webTestClient request
         webTestClient.post()
@@ -194,7 +191,7 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
                         Mono.just(openAI_SuggestionsDTO),
-                        OpenAI_SuggestionsResponse.class
+                        OpenAI_SuggestionsDTO.class
                 )
                 .exchange()
                 .expectStatus()

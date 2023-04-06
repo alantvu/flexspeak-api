@@ -8,6 +8,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/open_ai")
@@ -23,8 +25,8 @@ public class OpenAIController {
     }
 
     @PostMapping("/suggestion")
-    public ResponseEntity<OpenAI_SuggestionsResponse> createSuggestions(@AuthenticationPrincipal UserDetails userDetails, @RequestBody OpenAI_SuggestionsRequest openAI_suggestionsRequest) {
-        OpenAI_SuggestionsResponse createdSuggestions = openAI_service.postSuggestion(userDetails.getUsername(), openAI_suggestionsRequest);
+    public ResponseEntity<List<OpenAI_SuggestionsDTO>> createSuggestions(@AuthenticationPrincipal UserDetails userDetails, @RequestBody OpenAI_SuggestionsDTO openAI_suggestionsRequest) {
+        List<OpenAI_SuggestionsDTO> createdSuggestions = openAI_service.postSuggestion(userDetails.getUsername(), openAI_suggestionsRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(createdSuggestions);
     }
