@@ -8,8 +8,10 @@ import dev.mjamieson.flexspeak.annotation.CurrentUsername;
 import dev.mjamieson.flexspeak.feature.model.Sentence;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import retrofit2.HttpException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,25 +75,27 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
         return openAISuggestionsDTOS;
     }
 
+    @SneakyThrows
     private OpenAI_SuggestionsDTO callOpen_AI(OpenAI_SuggestionsDTO openAI_suggestionsDTO) {
         List<String> stopList = new ArrayList<String>();
         stopList.add("\n");
         CompletionRequest completionRequest = CompletionRequest.builder()
-                .prompt("Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics:" + openAI_suggestionsDTO.openAI_Suggestions() )
-                .temperature(0.0)
-                .frequencyPenalty(1.57)
-                .maxTokens(20)
-                .topP(1.0)
-                .bestOf(1)
-//                .stop(stopList)
+                .prompt("Recommend topics:" + openAI_suggestionsDTO.openAI_Suggestions())
                 .echo(false)
                 .model("davinci")
                 .build();
-        List<CompletionChoice> completionChoices = openAiService.createCompletion(completionRequest).getChoices();
-        String aiSentence = completionChoices.get(0).getText();
-        return new OpenAI_SuggestionsDTO(
-                openAI_suggestionsDTO.subject(),
-                aiSentence
-        );
+
+        try {
+            List<CompletionChoice> completionChoices = openAiService.createCompletion(completionRequest).getChoices();
+            String aiSentence = completionChoices.get(0).getText();
+            return new OpenAI_SuggestionsDTO(
+                    openAI_suggestionsDTO.subject(),
+                    aiSentence
+            );
+        } catch (HttpException e) {
+            System.out.println("An error occurred while calling OpenAI: " + e.getMessage());
+            throw e;
+
+        }
     }
 }
