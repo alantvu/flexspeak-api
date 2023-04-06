@@ -63,7 +63,7 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
     }
 
     @Override
-    public List<OpenAI_SuggestionsDTO> postSuggestion(String username, OpenAI_SuggestionsDTO openAI_suggestionsRequest) {
+    public List<OpenAI_SuggestionsDTO> postSuggestion(String username, List<OpenAI_SuggestionsDTO>  openAI_suggestionsDTOS) {
         return null;
     }
 }

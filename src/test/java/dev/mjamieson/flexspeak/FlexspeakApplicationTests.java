@@ -180,7 +180,11 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
         List<String> suggestions = Arrays.asList("pizza", "sushi", "tacos", "burgers", "pasta");
 
 
-        OpenAI_SuggestionsDTO openAI_SuggestionsDTO = new OpenAI_SuggestionsDTO("food","vietnam food");
+        List<OpenAI_SuggestionsDTO> openAI_SuggestionsDTOList = new ArrayList<>();
+        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsDTO("item", "fishing"));
+        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsDTO("food", "vietnam food"));
+        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsDTO("interest", "astronomy"));
+//        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsDTO("important people", ""));
 
 
         // Pass the OpenAI_SuggestionsDTO instance to the webTestClient request
@@ -190,12 +194,16 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                        Mono.just(openAI_SuggestionsDTO),
-                        OpenAI_SuggestionsDTO.class
+                        Mono.just(openAI_SuggestionsDTOList),
+                        new ParameterizedTypeReference<List<OpenAI_SuggestionsDTO>>() {}
                 )
                 .exchange()
                 .expectStatus()
-                .isCreated();
+                .isCreated()
+                .expectBodyList(OpenAI_SuggestionsDTO.class)
+                .consumeWith(response -> {
+                    assertThat(response.getResponseBody()).isNotEmpty();
+                });
 
         webTestClient.get()
                 .uri(USER_PATH)

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface OpenAI_Service {
     Sentence postSpeech(@CurrentUsername String username, Sentence sentence);
-    List<OpenAI_SuggestionsDTO> postSuggestion(@CurrentUsername String username, OpenAI_SuggestionsDTO openAI_suggestionsRequest);
+    List<OpenAI_SuggestionsDTO> postSuggestion(@CurrentUsername String username, List<OpenAI_SuggestionsDTO> openAI_suggestionsDTOS);
 }
