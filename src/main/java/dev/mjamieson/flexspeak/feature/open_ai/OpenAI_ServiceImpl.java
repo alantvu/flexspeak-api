@@ -3,7 +3,6 @@ package dev.mjamieson.flexspeak.feature.open_ai;
 import com.theokanning.openai.OpenAiService;
 import com.theokanning.openai.completion.CompletionChoice;
 import com.theokanning.openai.completion.CompletionRequest;
-import com.theokanning.openai.engine.Engine;
 import dev.mjamieson.flexspeak.feature.aac.AAC_Service;
 import dev.mjamieson.flexspeak.annotation.CurrentUsername;
 import dev.mjamieson.flexspeak.feature.model.Sentence;
@@ -61,5 +60,10 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
         return Sentence.builder()
                 .sentence(aiSentence)
                 .build();
+    }
+
+    @Override
+    public OpenAI_SuggestionsResponse postSuggestion(String username, OpenAI_SuggestionsRequest openAI_suggestionsRequest) {
+        return null;
     }
 }

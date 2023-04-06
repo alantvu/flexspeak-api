@@ -17,14 +17,15 @@ public class OpenAIController {
 
     @PostMapping("/speech")
     public ResponseEntity<Sentence> createSpeech(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Sentence sentence) {
-        return new ResponseEntity<>(openAI_service.postSpeech(userDetails.getUsername(), sentence),
-                HttpStatus.CREATED
-        );
+        Sentence ai_sentence = openAI_service.postSpeech(userDetails.getUsername(), sentence);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ai_sentence);
     }
+
     @PostMapping("/suggestion")
-    public ResponseEntity<Sentence> createSuggestions(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Sentence sentence) {
-        return new ResponseEntity<>(openAI_service.postSpeech(userDetails.getUsername(), sentence),
-                HttpStatus.CREATED
-        );
+    public ResponseEntity<OpenAI_SuggestionsResponse> createSuggestions(@AuthenticationPrincipal UserDetails userDetails, @RequestBody OpenAI_SuggestionsRequest openAI_suggestionsRequest) {
+        OpenAI_SuggestionsResponse createdSuggestions = openAI_service.postSuggestion(userDetails.getUsername(), openAI_suggestionsRequest);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(createdSuggestions);
     }
 }

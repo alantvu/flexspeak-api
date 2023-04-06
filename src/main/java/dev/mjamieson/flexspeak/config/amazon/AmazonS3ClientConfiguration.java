@@ -1,4 +1,4 @@
-package dev.mjamieson.flexspeak.config;
+package dev.mjamieson.flexspeak.config.amazon;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

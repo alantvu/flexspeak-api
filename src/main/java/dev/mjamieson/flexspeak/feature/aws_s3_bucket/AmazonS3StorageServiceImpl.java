@@ -1,13 +1,9 @@
 package dev.mjamieson.flexspeak.feature.aws_s3_bucket;
 
-import dev.mjamieson.flexspeak.config.AmazonS3Configuration;
-import jakarta.annotation.PostConstruct;
+import dev.mjamieson.flexspeak.config.amazon.AmazonS3Configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;

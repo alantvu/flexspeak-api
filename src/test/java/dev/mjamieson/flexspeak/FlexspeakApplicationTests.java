@@ -2,6 +2,7 @@ package dev.mjamieson.flexspeak;
 
 import dev.mjamieson.flexspeak.feature.model.Sentence;
 import dev.mjamieson.flexspeak.feature.model.Word;
+import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_SuggestionsResponse;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationRequest;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationResponse;
 import dev.mjamieson.flexspeak.feature.user.auth.RegisterRequest;
@@ -13,7 +14,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -21,6 +21,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -176,18 +177,28 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
 //                .expectStatus()
 //                .isOk();
 
+        // Create a list of suggestions
+        List<String> suggestions = Arrays.asList("pizza", "sushi", "tacos", "burgers", "pasta");
+
+
+        // Create an instance of OpenAI_SuggestionsDTO with the suggestions list
+        OpenAI_SuggestionsResponse openAI_SuggestionsDTO = new OpenAI_SuggestionsResponse(suggestions);
+
+        // ...
+
+        // Pass the OpenAI_SuggestionsDTO instance to the webTestClient request
         webTestClient.post()
-                .uri(OPEN_AI_PATH + "/suggestion ")
+                .uri(OPEN_AI_PATH + "/suggestion")
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                        Mono.just(sentence),
-                        Sentence.class
+                        Mono.just(openAI_SuggestionsDTO),
+                        OpenAI_SuggestionsResponse.class
                 )
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isCreated();
 
         webTestClient.get()
                 .uri(USER_PATH)
