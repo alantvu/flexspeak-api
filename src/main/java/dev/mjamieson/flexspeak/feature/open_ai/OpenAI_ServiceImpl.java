@@ -99,7 +99,7 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
 
         try {
             List<ChatCompletionChoice> completionChoices = openAiService.createChatCompletion(completionRequest).getChoices();
-            String aiSentence = completionChoices.get(0).toString();
+            String aiSentence = completionChoices.get(0).getMessage().getContent();
             return new OpenAI_SuggestionsDTO(
                     openAI_suggestionsDTO.subject(),
                     aiSentence
