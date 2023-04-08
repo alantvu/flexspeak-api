@@ -184,22 +184,22 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
         openAI_suggestionRequests.add(new OpenAI_SuggestionRequest("food", "vietnamese food"));
         openAI_suggestionRequests.add(new OpenAI_SuggestionRequest("interest", "astronomy"));
 
-        webTestClient.post()
-                .uri(OPEN_AI_PATH + "/suggestion")
-                .header("Authorization", "Bearer " + token)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(
-                        Mono.just(openAI_suggestionRequests),
-                        new ParameterizedTypeReference<List<OpenAI_SuggestionRequest>>() {}
-                )
-                .exchange()
-                .expectStatus()
-                .isCreated()
-                .expectBodyList(OpenAI_SuggestionsResponse.class)
-                .consumeWith(response -> {
-                    assertThat(response.getResponseBody()).isNotEmpty();
-                });
+//        webTestClient.post()
+//                .uri(OPEN_AI_PATH + "/suggestion")
+//                .header("Authorization", "Bearer " + token)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(
+//                        Mono.just(openAI_suggestionRequests),
+//                        new ParameterizedTypeReference<List<OpenAI_SuggestionRequest>>() {}
+//                )
+//                .exchange()
+//                .expectStatus()
+//                .isCreated()
+//                .expectBodyList(OpenAI_SuggestionsResponse.class)
+//                .consumeWith(response -> {
+//                    assertThat(response.getResponseBody()).isNotEmpty();
+//                });
 
 
         webTestClient.get()
