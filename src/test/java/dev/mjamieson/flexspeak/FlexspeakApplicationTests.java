@@ -2,6 +2,7 @@ package dev.mjamieson.flexspeak;
 
 import dev.mjamieson.flexspeak.feature.model.Sentence;
 import dev.mjamieson.flexspeak.feature.model.Word;
+import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_SuggestionRequest;
 import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_SuggestionsResponse;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationRequest;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationResponse;
@@ -177,25 +178,20 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
 //                .expectStatus()
 //                .isOk();
 
-        List<String> suggestions = Arrays.asList("pizza", "sushi", "tacos", "burgers", "pasta");
 
+        List<OpenAI_SuggestionRequest> openAI_suggestionRequests = new ArrayList<>();
+//        openAI_suggestionRequests.add(new OpenAI_SuggestionsResponse("item", Arrays.asList("fishing")));
+        openAI_suggestionRequests.add(new OpenAI_SuggestionRequest("food", "vietnamese food"));
+//        openAI_suggestionRequests.add(new OpenAI_SuggestionRequest("interest", "astronomy"));
 
-        List<OpenAI_SuggestionsResponse> openAI_SuggestionsDTOList = new ArrayList<>();
-        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsResponse("item", "fishing"));
-        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsResponse("food", "vietnam food"));
-        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsResponse("interest", "astronomy"));
-//        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsDTO("important people", ""));
-
-
-        // Pass the OpenAI_SuggestionsDTO instance to the webTestClient request
         webTestClient.post()
                 .uri(OPEN_AI_PATH + "/suggestion")
                 .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                        Mono.just(openAI_SuggestionsDTOList),
-                        new ParameterizedTypeReference<List<OpenAI_SuggestionsResponse>>() {}
+                        Mono.just(openAI_suggestionRequests),
+                        new ParameterizedTypeReference<List<OpenAI_SuggestionRequest>>() {}
                 )
                 .exchange()
                 .expectStatus()
@@ -204,6 +200,7 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .consumeWith(response -> {
                     assertThat(response.getResponseBody()).isNotEmpty();
                 });
+
 
         webTestClient.get()
                 .uri(USER_PATH)
