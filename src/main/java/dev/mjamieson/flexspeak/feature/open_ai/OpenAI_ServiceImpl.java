@@ -79,7 +79,7 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
         for (OpenAI_SuggestionRequest request : openAI_suggestionRequests) {
             ChatMessage chatMessage = new ChatMessage("user",
                     "Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics, ONLY have the name of the food: USER INPUT: "
-                            + request.openAI_Suggestion());
+                            + request.request());
             OpenAI_SuggestionsResponse response = callOpen_AI(chatMessage, request);
             openAISuggestionsDTOS.add(response);
         }
