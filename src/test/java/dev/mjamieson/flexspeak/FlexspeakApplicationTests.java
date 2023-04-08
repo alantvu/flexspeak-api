@@ -182,7 +182,7 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
         List<OpenAI_SuggestionRequest> openAI_suggestionRequests = new ArrayList<>();
 //        openAI_suggestionRequests.add(new OpenAI_SuggestionsResponse("item", Arrays.asList("fishing")));
         openAI_suggestionRequests.add(new OpenAI_SuggestionRequest("food", "vietnamese food"));
-//        openAI_suggestionRequests.add(new OpenAI_SuggestionRequest("interest", "astronomy"));
+        openAI_suggestionRequests.add(new OpenAI_SuggestionRequest("interest", "astronomy"));
 
         webTestClient.post()
                 .uri(OPEN_AI_PATH + "/suggestion")

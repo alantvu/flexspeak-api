@@ -70,49 +70,45 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
                 .build();
     }
 
+
+
     @Override
     public List<OpenAI_SuggestionsResponse> postSuggestion(String username, List<OpenAI_SuggestionRequest> openAI_suggestionRequests) {
+        List<OpenAI_SuggestionsResponse> openAISuggestionsDTOS = new ArrayList<>();
 
-        List<OpenAI_SuggestionsResponse> openAISuggestionsDTOS = openAI_suggestionRequests.stream()
-                .map(this::callOpen_AI)
-                .collect(Collectors.toList());
+        for (OpenAI_SuggestionRequest request : openAI_suggestionRequests) {
+            ChatMessage chatMessage = new ChatMessage("user",
+                    "Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics, ONLY have the name of the food: USER INPUT: "
+                            + request.openAI_Suggestion());
+            OpenAI_SuggestionsResponse response = callOpen_AI(chatMessage, request);
+            openAISuggestionsDTOS.add(response);
+        }
+
         return openAISuggestionsDTOS;
     }
 
     @SneakyThrows
-    private OpenAI_SuggestionsResponse callOpen_AI(OpenAI_SuggestionRequest openAI_suggestionRequest) {
-        List<String> stopList = new ArrayList();
-        stopList.add("\n");
-
-        List<ChatMessage> chatMessages = new ArrayList<>();
-        chatMessages.add(new ChatMessage("user",
-                "Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics, ONLY have the name of the food: USER INPUT: "
-                        + openAI_suggestionRequest.openAI_Suggestion()));
-
+    private OpenAI_SuggestionsResponse callOpen_AI(ChatMessage chatMessage, OpenAI_SuggestionRequest openAI_suggestionRequest) {
         ChatCompletionRequest completionRequest = ChatCompletionRequest.builder()
-                .messages(chatMessages)
+                .messages(Arrays.asList(chatMessage))
                 .model("gpt-3.5-turbo")
                 .build();
 
         try {
             List<ChatCompletionChoice> completionChoices = openAiService.createChatCompletion(completionRequest).getChoices();
-            String aiSentence = completionChoices.get(0).getMessage().getContent();
-
-            // Split the aiSentence string by line breaks and store it as an array of strings
+            ChatCompletionChoice completionChoice = completionChoices.get(0);
+            String aiSentence = completionChoice.getMessage().getContent();
             List<String> aiSentenceArray = Arrays.asList(aiSentence.split("\\n"));
             List<String> cleanedSuggestions = aiSentenceArray.stream()
                     .map(suggestion -> suggestion.replaceAll("^\\d+\\.?\\s*", ""))
                     .collect(Collectors.toList());
 
-            return new OpenAI_SuggestionsResponse(
-                    openAI_suggestionRequest.subject(),
-                    cleanedSuggestions
-            );
+            String subject = openAI_suggestionRequest.subject();
+
+            return new OpenAI_SuggestionsResponse(subject, cleanedSuggestions);
         } catch (HttpException e) {
             System.out.println("An error occurred while calling OpenAI: " + e.getMessage());
             throw e;
         }
     }
-
-
 }
