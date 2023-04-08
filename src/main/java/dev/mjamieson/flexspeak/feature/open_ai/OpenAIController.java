@@ -25,8 +25,8 @@ public class OpenAIController {
     }
 
     @PostMapping("/suggestion")
-    public ResponseEntity<List<OpenAI_SuggestionsDTO>> createSuggestions(@AuthenticationPrincipal UserDetails userDetails, @RequestBody List<OpenAI_SuggestionsDTO> openAI_suggestionsDTOS) {
-        List<OpenAI_SuggestionsDTO> createdSuggestions = openAI_service.postSuggestion(userDetails.getUsername(), openAI_suggestionsDTOS);
+    public ResponseEntity<List<OpenAI_SuggestionsResponse>> createSuggestions(@AuthenticationPrincipal UserDetails userDetails, @RequestBody List<OpenAI_SuggestionRequest> openAI_suggestionRequests) {
+        List<OpenAI_SuggestionsResponse> createdSuggestions = openAI_service.postSuggestion(userDetails.getUsername(), openAI_suggestionRequests);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(createdSuggestions);
     }

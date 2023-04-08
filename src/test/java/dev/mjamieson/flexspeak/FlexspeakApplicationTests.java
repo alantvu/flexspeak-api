@@ -2,7 +2,7 @@ package dev.mjamieson.flexspeak;
 
 import dev.mjamieson.flexspeak.feature.model.Sentence;
 import dev.mjamieson.flexspeak.feature.model.Word;
-import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_SuggestionsDTO;
+import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_SuggestionsResponse;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationRequest;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationResponse;
 import dev.mjamieson.flexspeak.feature.user.auth.RegisterRequest;
@@ -180,10 +180,10 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
         List<String> suggestions = Arrays.asList("pizza", "sushi", "tacos", "burgers", "pasta");
 
 
-        List<OpenAI_SuggestionsDTO> openAI_SuggestionsDTOList = new ArrayList<>();
-        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsDTO("item", "fishing"));
-        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsDTO("food", "vietnam food"));
-        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsDTO("interest", "astronomy"));
+        List<OpenAI_SuggestionsResponse> openAI_SuggestionsDTOList = new ArrayList<>();
+        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsResponse("item", "fishing"));
+        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsResponse("food", "vietnam food"));
+        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsResponse("interest", "astronomy"));
 //        openAI_SuggestionsDTOList.add(new OpenAI_SuggestionsDTO("important people", ""));
 
 
@@ -195,12 +195,12 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
                         Mono.just(openAI_SuggestionsDTOList),
-                        new ParameterizedTypeReference<List<OpenAI_SuggestionsDTO>>() {}
+                        new ParameterizedTypeReference<List<OpenAI_SuggestionsResponse>>() {}
                 )
                 .exchange()
                 .expectStatus()
                 .isCreated()
-                .expectBodyList(OpenAI_SuggestionsDTO.class)
+                .expectBodyList(OpenAI_SuggestionsResponse.class)
                 .consumeWith(response -> {
                     assertThat(response.getResponseBody()).isNotEmpty();
                 });

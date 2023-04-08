@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import retrofit2.HttpException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,44 +71,48 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
     }
 
     @Override
-    public List<OpenAI_SuggestionsDTO> postSuggestion(String username, List<OpenAI_SuggestionsDTO> openAI_suggestionsDTOS) {
+    public List<OpenAI_SuggestionsResponse> postSuggestion(String username, List<OpenAI_SuggestionRequest> openAI_suggestionRequests) {
 
-        List<OpenAI_SuggestionsDTO> openAISuggestionsDTOS = openAI_suggestionsDTOS.stream()
+        List<OpenAI_SuggestionsResponse> openAISuggestionsDTOS = openAI_suggestionRequests.stream()
                 .map(this::callOpen_AI)
                 .collect(Collectors.toList());
         return openAISuggestionsDTOS;
     }
 
     @SneakyThrows
-    private OpenAI_SuggestionsDTO callOpen_AI(OpenAI_SuggestionsDTO openAI_suggestionsDTO) {
-        List<String> stopList = new ArrayList<String>();
+    private OpenAI_SuggestionsResponse callOpen_AI(OpenAI_SuggestionRequest openAI_suggestionRequest) {
+        List<String> stopList = new ArrayList();
         stopList.add("\n");
 
         List<ChatMessage> chatMessages = new ArrayList<>();
-        chatMessages.add(new ChatMessage("user", "Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics: USER INPUT: " + openAI_suggestionsDTO.openAI_Suggestions()));
+        chatMessages.add(new ChatMessage("user",
+                "Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics, ONLY have the name of the food: USER INPUT: "
+                        + openAI_suggestionRequest.openAI_Suggestion()));
 
         ChatCompletionRequest completionRequest = ChatCompletionRequest.builder()
                 .messages(chatMessages)
-//                .prompt(
-//                        "Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics:" +
-//                               " USER INPUT: " + openAI_suggestionsDTO.openAI_Suggestions())
-//                .echo(false)
-//                .model("davinci")
                 .model("gpt-3.5-turbo")
-//                .model("gpt-4")
                 .build();
 
         try {
             List<ChatCompletionChoice> completionChoices = openAiService.createChatCompletion(completionRequest).getChoices();
             String aiSentence = completionChoices.get(0).getMessage().getContent();
-            return new OpenAI_SuggestionsDTO(
-                    openAI_suggestionsDTO.subject(),
-                    aiSentence
+
+            // Split the aiSentence string by line breaks and store it as an array of strings
+            List<String> aiSentenceArray = Arrays.asList(aiSentence.split("\\n"));
+            List<String> cleanedSuggestions = aiSentenceArray.stream()
+                    .map(suggestion -> suggestion.replaceAll("^\\d+\\.?\\s*", ""))
+                    .collect(Collectors.toList());
+
+            return new OpenAI_SuggestionsResponse(
+                    openAI_suggestionRequest.subject(),
+                    cleanedSuggestions
             );
         } catch (HttpException e) {
             System.out.println("An error occurred while calling OpenAI: " + e.getMessage());
             throw e;
-
         }
     }
+
+
 }
