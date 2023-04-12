@@ -24,6 +24,14 @@ public class CustomWordController {
                 HttpStatus.CREATED
         );
     }
+    @PostMapping("/bulk-create")
+    public ResponseEntity<Void> createBulk(
+            @AuthenticationPrincipal UserDetails userDetails,
+            MultipartHttpServletRequest request
+    ) {
+        customWordService.posts(userDetails.getUsername(), request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
     @GetMapping()
     public ResponseEntity<List<CustomWordDTO>> get(@AuthenticationPrincipal UserDetails userDetails){
         List<CustomWordDTO> customWords = customWordService.get(userDetails.getUsername());

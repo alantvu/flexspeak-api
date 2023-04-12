@@ -36,14 +36,25 @@ public class CustomWordServiceImpl implements CustomWordService {
         final ObjectMapper objectMapper = new ObjectMapper();
         CustomWordDTO customWordDTO = objectMapper.readValue(jsonMetadata, CustomWordDTO.class);
 
-        MultipartFile imageMultipartFile = request.getFile(IMAGE_FILE); // image
-
-        if (Objects.nonNull(imageMultipartFile)) saveCustomWordAndImage(imageMultipartFile,username,customWordDTO);
-        else customWordDAO.save(username,customWordDTO);
+        handleSingleCustomWord(username, request, customWordDTO);
 
         return null;
     }
 
+    @Override
+    @SneakyThrows
+    public Void posts(String username, MultipartHttpServletRequest request) {
+        String jsonMetadata = request.getParameter(METADATA_PARAMETER_NAME);
+        final ObjectMapper objectMapper = new ObjectMapper();
+        List<CustomWordDTO> customWordDTOs = objectMapper.readValue(jsonMetadata, objectMapper.getTypeFactory().constructCollectionType(List.class, CustomWordDTO.class));
+
+        // Loop through each CustomWordDTO and handle it
+        for (CustomWordDTO customWordDTO : customWordDTOs) {
+            handleSingleCustomWord(username, request, customWordDTO);
+        }
+
+        return null;
+    }
     @Override
     public List<CustomWordDTO> get(@CurrentUsername String username) {
         List<CustomWordDTO> customWordDTOS = customWordDAO.get(username)
@@ -65,6 +76,15 @@ public class CustomWordServiceImpl implements CustomWordService {
         String fileName = createFileName(multipartFile);
         storeInS3Bucket(multipartFile,fileName);
         customWordDAO.save(username,CustomWordDTO.fromWithImagePath(customWordDTO,fileName));
+    };
+    private void handleSingleCustomWord(String username, MultipartHttpServletRequest request, CustomWordDTO customWordDTO) {
+        MultipartFile imageMultipartFile = request.getFile(IMAGE_FILE);
+
+        if (Objects.nonNull(imageMultipartFile)) {
+            saveCustomWordAndImage(imageMultipartFile, username, customWordDTO);
+        } else {
+            customWordDAO.save(username, customWordDTO);
+        }
     };
 
     private String createFileName(MultipartFile multipartFile) {

@@ -9,5 +9,6 @@ import java.util.List;
 public interface CustomWordService {
 
     Void post(@CurrentUsername String username, MultipartHttpServletRequest request);
+    Void posts(@CurrentUsername String username, MultipartHttpServletRequest request);
     List<CustomWordDTO> get(String username);
 }

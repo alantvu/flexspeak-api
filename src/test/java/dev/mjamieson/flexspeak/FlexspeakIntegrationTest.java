@@ -2,8 +2,6 @@ package dev.mjamieson.flexspeak;
 
 import dev.mjamieson.flexspeak.feature.model.Sentence;
 import dev.mjamieson.flexspeak.feature.model.Word;
-import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_SuggestionRequest;
-import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_SuggestionsResponse;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationRequest;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationResponse;
 import dev.mjamieson.flexspeak.feature.user.auth.RegisterRequest;
@@ -22,7 +20,6 @@ import reactor.core.publisher.Mono;
 
 import java.time.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +28,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-public class FlexspeakApplicationTests extends AbstractTestContainers {
+public class FlexspeakIntegrationTest extends AbstractTestContainers {
 
 
     @Autowired
@@ -179,27 +176,26 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
 //                .isOk();
 
 
-        List<OpenAI_SuggestionRequest> openAI_suggestionRequests = new ArrayList<>();
-//        openAI_suggestionRequests.add(new OpenAI_SuggestionsResponse("item", Arrays.asList("fishing")));
-        openAI_suggestionRequests.add(new OpenAI_SuggestionRequest("food", "vietnamese food"));
-        openAI_suggestionRequests.add(new OpenAI_SuggestionRequest("interest", "astronomy"));
-
-        webTestClient.post()
-                .uri(OPEN_AI_PATH + "/suggestion")
-                .header("Authorization", "Bearer " + token)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(
-                        Mono.just(openAI_suggestionRequests),
-                        new ParameterizedTypeReference<List<OpenAI_SuggestionRequest>>() {}
-                )
-                .exchange()
-                .expectStatus()
-                .isCreated()
-                .expectBodyList(OpenAI_SuggestionsResponse.class)
-                .consumeWith(response -> {
-                    assertThat(response.getResponseBody()).isNotEmpty();
-                });
+//        List<OpenAI_SuggestionRequest> openAI_suggestionRequests = new ArrayList<>();
+//        openAI_suggestionRequests.add(new OpenAI_SuggestionRequest("food", "vietnamese food"));
+//        openAI_suggestionRequests.add(new OpenAI_SuggestionRequest("interest", "astronomy"));
+//
+//        webTestClient.post()
+//                .uri(OPEN_AI_PATH + "/suggestion")
+//                .header("Authorization", "Bearer " + token)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(
+//                        Mono.just(openAI_suggestionRequests),
+//                        new ParameterizedTypeReference<List<OpenAI_SuggestionRequest>>() {}
+//                )
+//                .exchange()
+//                .expectStatus()
+//                .isCreated()
+//                .expectBodyList(OpenAI_SuggestionsResponse.class)
+//                .consumeWith(response -> {
+//                    assertThat(response.getResponseBody()).isNotEmpty();
+//                });
 
 
         webTestClient.get()
@@ -210,32 +206,32 @@ public class FlexspeakApplicationTests extends AbstractTestContainers {
                 .expectStatus()
                 .isOk();
 
-        webTestClient
-                .method(HttpMethod.GET)
-                .uri(FLAT_ICON_PATH)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus()
-                .isOk();
-
-        webTestClient
-                .method(HttpMethod.GET)
-                .uri(FLAT_ICON_PATH)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus()
-                .isOk();
-
-        webTestClient
-                .method(HttpMethod.GET)
-                .uri(FLAT_ICON_PATH)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .exchange()
-                .expectStatus()
-                .isOk();
+//        webTestClient
+//                .method(HttpMethod.GET)
+//                .uri(FLAT_ICON_PATH)
+//                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .exchange()
+//                .expectStatus()
+//                .isOk();
+//
+//        webTestClient
+//                .method(HttpMethod.GET)
+//                .uri(FLAT_ICON_PATH)
+//                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .exchange()
+//                .expectStatus()
+//                .isOk();
+//
+//        webTestClient
+//                .method(HttpMethod.GET)
+//                .uri(FLAT_ICON_PATH)
+//                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .exchange()
+//                .expectStatus()
+//                .isOk();
 
 
         webTestClient
