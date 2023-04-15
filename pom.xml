@@ -9,12 +9,17 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>dev.mjamieson</groupId>
-    <artifactId>flexspeak</artifactId>
+    <artifactId>flexspeak-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <organization>
+        <name>flexspeak</name>
+    </organization>
     <name>flexspeak</name>
     <description>Flex Speak project for Spring Boot</description>
     <properties>
-        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <docker.username>michaeljamieson10</docker.username>
     </properties>
     <dependencies>
         <dependency>
@@ -198,6 +203,40 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <from>
+                        <image>eclipse-temurin:17</image>
+                        <platforms>
+                            <platform>
+                                <architecture>arm64</architecture>
+                                <os>linux</os>
+                            </platform>
+                            <platform>
+                                <architecture>amd64</architecture>
+                                <os>linux</os>
+                            </platform>
+                        </platforms>
+                    </from>
+                    <to>
+                        <image>docker.io/${docker.username}/${project.artifactId}:${project.version}</image>
+                        <tags>
+                            <tag>latest</tag>
+                        </tags>
+                    </to>
+                </configuration>
             </plugin>
         </plugins>
         <resources>
