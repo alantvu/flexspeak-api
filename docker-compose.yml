@@ -2,11 +2,10 @@ version: '3'
 services:
   db:
     container_name: postgres
-    image: postgres:latest
+    image: postgres
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: customer
       PGDATA: /data/postgres
     volumes:
       - db:/data/postgres
