@@ -12,18 +12,13 @@ public class FlexspeakApplication {
 
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(FlexspeakApplication.class)
-				.properties("spring.config.name:application,application-secret")
 				.build()
 				.run(args);
 	}
-
-
-
 
 	@Bean
 	Clock clock() {
 		return Clock.systemUTC();
 	}
-
 
 }
