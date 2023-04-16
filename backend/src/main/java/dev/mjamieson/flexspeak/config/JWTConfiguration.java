@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 
 //jwt.secret=566D597133743677397A244226452948404D635166546A576E5A723475377821
-//jwt.access-token-expiration-time=86400000
-//jwt.refresh-token-expiration-time=2592000000
 @ConfigurationProperties(prefix = "jwt")
 @Component
 @Data
