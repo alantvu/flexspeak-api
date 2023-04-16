@@ -2,7 +2,7 @@ version: '3'
 services:
   db:
     container_name: postgres
-    image: postgres:15.1
+    image: postgres:15.2
     environment:
       POSTGRES_USER: flexspeak123
       POSTGRES_PASSWORD: password
