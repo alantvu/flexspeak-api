@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.util.Base64;
 
 //jwt.secret=566D597133743677397A244226452948404D635166546A576E5A723475377821
 @ConfigurationProperties(prefix = "jwt")
@@ -21,6 +22,9 @@ public class JWTConfiguration {
     @PostConstruct
     private void init() {
 
-        key = Keys.hmacShaKeyFor(secret.getBytes());
+        byte[] decodedKey = Base64.getDecoder().decode(secret);
+        key = Keys.hmacShaKeyFor(decodedKey);
+        // Print the key for debugging purposes
+        System.out.println("Keysssssaas: \"" + secret + "\"");
     }
 }
