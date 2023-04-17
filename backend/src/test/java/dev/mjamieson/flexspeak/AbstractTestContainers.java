@@ -51,9 +51,12 @@ public abstract class AbstractTestContainers {
 
     @DynamicPropertySource
     protected static void registerDataSourceProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url",postgreSQLContainer::getJdbcUrl);
+//        registry.add("spring.datasource.url",postgreSQLContainer::getJdbcUrl);
         registry.add("spring.datasource.user",postgreSQLContainer::getUsername);
-        registry.add("spring.datasource.password",postgreSQLContainer::getPassword);
+//        registry.add("spring.datasource.password",postgreSQLContainer::getPassword);
+        registry.add("spring.datasource.url",postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.user",()->"flexspeak123");
+        registry.add("spring.datasource.password",()->"password123");
     }
 
     protected static final Faker FAKER = new Faker();
