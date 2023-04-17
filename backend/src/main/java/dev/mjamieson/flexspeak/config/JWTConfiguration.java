@@ -21,10 +21,7 @@ public class JWTConfiguration {
 
     @PostConstruct
     private void init() {
-
-        System.out.println("Keysssssaas: \"" + secret + "\"");
         byte[] decodedKey = Base64.getDecoder().decode(secret);
         key = Keys.hmacShaKeyFor(decodedKey);
-        // Print the key for debugging purposes
     }
 }
