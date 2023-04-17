@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 @Testcontainers
-@TestPropertySource(properties = "spring.config.name:application,application-secret")
+@TestPropertySource(properties = "spring.config.name")
 //@TestPropertySource(properties = {
 //        "spring.config.name:application,application-secret",
 //        "spring.datasource.hikari.maximum-pool-size:5",
@@ -46,8 +46,8 @@ public abstract class AbstractTestContainers {
     @Container
     protected static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:latest")
             .withDatabaseName("dao-unit-test")
-            .withUsername("admin")
-            .withPassword("password");
+            .withUsername("flexspeak123")
+            .withPassword("password123");
 
     @DynamicPropertySource
     protected static void registerDataSourceProperties(DynamicPropertyRegistry registry) {
