@@ -17,18 +17,6 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 @Testcontainers
-@TestPropertySource(properties = "spring.config.name")
-//@TestPropertySource(properties = {
-//        "spring.config.name:application,application-secret",
-//        "spring.datasource.hikari.maximum-pool-size:5",
-//        "spring.datasource.hikari.idle-timeout:10000", // 10 seconds
-//        "spring.datasource.hikari.min-idle:0",
-//        "spring.datasource.hikari.connection-timeout:30000", // 30 seconds
-//        "spring.datasource.hikari.max-lifetime:2000", // 30 seconds
-//        "spring.datasource.hikari.testWhileIdle:true",
-//        "spring.datasource.hikari.test-on-borrow:true",
-//        "spring.datasource.hikari.leakDetectionThreshold:2000"
-//})
 public abstract class AbstractTestContainers {
 
     @BeforeAll
@@ -51,12 +39,9 @@ public abstract class AbstractTestContainers {
 
     @DynamicPropertySource
     protected static void registerDataSourceProperties(DynamicPropertyRegistry registry) {
-//        registry.add("spring.datasource.url",postgreSQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.user",postgreSQLContainer::getUsername);
-//        registry.add("spring.datasource.password",postgreSQLContainer::getPassword);
         registry.add("spring.datasource.url",postgreSQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.user",()->"flexspeak123");
-        registry.add("spring.datasource.password",()->"password123");
+        registry.add("spring.datasource.user",postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.password",postgreSQLContainer::getPassword);
     }
 
     protected static final Faker FAKER = new Faker();
