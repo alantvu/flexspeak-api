@@ -45,7 +45,6 @@ public abstract class AbstractTestContainers {
     }
 
     protected static final Faker FAKER = new Faker();
-
     protected User createRandomUser() {
         return User.builder()
                 .firstname(FAKER.name().firstName())
