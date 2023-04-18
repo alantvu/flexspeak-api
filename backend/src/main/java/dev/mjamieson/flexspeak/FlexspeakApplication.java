@@ -15,6 +15,7 @@ public class FlexspeakApplication {
 				.build()
 				.run(args);
 	}
+
 	@Bean
 	Clock clock() {
 		return Clock.systemUTC();
