@@ -15,7 +15,7 @@ jobs:
         image: postgres:15.2
         env:
           POSTGRES_USER: flexspeak123
-          POSTGRES_PASSWORD: password
+          POSTGRES_PASSWORD: password123
           POSTGRES_DB: customer
         ports:
           - 5332:5432

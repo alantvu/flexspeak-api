@@ -5,7 +5,7 @@ services:
     image: postgres:15.2
     environment:
       POSTGRES_USER: flexspeak123
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: password123
       PGDATA: /data/postgres
     volumes:
       - db:/data/postgres
