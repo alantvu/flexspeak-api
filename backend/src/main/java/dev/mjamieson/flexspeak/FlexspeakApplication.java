@@ -13,7 +13,6 @@ public class FlexspeakApplication {
 		new SpringApplicationBuilder(FlexspeakApplication.class)
 				.build()
 				.run(args);
-
 	}
 	@Bean
 	Clock clock() {
