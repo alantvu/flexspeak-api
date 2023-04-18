@@ -219,9 +219,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <container>
-                        <mainClass>com.test.FlexspeakApplication</mainClass>
-                    </container>
                     <from>
                         <image>eclipse-temurin:17</image>
                         <platforms>
