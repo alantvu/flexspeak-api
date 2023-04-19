@@ -70,6 +70,12 @@ jobs:
           version_description: ${{ github.SHA }}
           region: ${{ secrets.EB_REGION }}
           deployment_package: backend/Dockerrun.aws.json
+          environment_variables: >-
+            JWT_SECRET=${{ secrets.JWT_SECRET }},
+            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }},
+            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }},
+            FLATICON_API_KEY=${{ secrets.FLATICON_API_KEY }},
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
       - name: Commit and push Dockerrun.aws.json
         run: |
           git config user.name github-actions
