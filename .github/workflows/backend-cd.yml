@@ -70,22 +70,29 @@ jobs:
           version_description: ${{ github.SHA }}
           region: ${{ secrets.EB_REGION }}
           deployment_package: backend/Dockerrun.aws.json
-          option_settings:
-            - Namespace: 'aws:elasticbeanstalk:application:environment'
-              OptionName: JWT_SECRET
-              Value: ${{ secrets.JWT_SECRET }}
-            - Namespace: 'aws:elasticbeanstalk:application:environment'
-              OptionName: AWS_ACCESS_KEY_ID
-              Value: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            - Namespace: 'aws:elasticbeanstalk:application:environment'
-              OptionName: AWS_SECRET_ACCESS_KEY
-              Value: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            - Namespace: 'aws:elasticbeanstalk:application:environment'
-              OptionName: FLATICON_API_KEY
-              Value: ${{ secrets.FLATICON_API_KEY }}
-            - Namespace: 'aws:elasticbeanstalk:application:environment'
-              OptionName: OPENAI_API_KEY
-              Value: ${{ secrets.OPENAI_API_KEY }}
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+
+      - name: Configure AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ secrets.EB_REGION }}
+
+      - name: Update Elastic Beanstalk environment variables
+        run: |
+          aws elasticbeanstalk update-environment \
+            --application-name ${{ secrets.EB_APPLICATION_NAME }} \
+            --environment-name ${{ secrets.EB_ENVIRONMENT_NAME }} \
+            --option-settings \
+              Namespace=aws:elasticbeanstalk:application:environment,OptionName=JWT_SECRET,Value=${{ secrets.JWT_SECRET }} \
+              Namespace=aws:elasticbeanstalk:application:environment,OptionName=AWS_ACCESS_KEY_ID,Value=${{ secrets.AWS_ACCESS_KEY_ID }} \
+              Namespace=aws:elasticbeanstalk:application:environment,OptionName=AWS_SECRET_ACCESS_KEY,Value=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
+              Namespace=aws:elasticbeanstalk:application:environment,OptionName=FLATICON_API_KEY,Value=${{ secrets.FLATICON_API_KEY }} \
+              Namespace=aws:elasticbeanstalk:application:environment,OptionName=OPENAI_API_KEY,Value=${{ secrets.OPENAI_API_KEY }}
       - name: Commit and push Dockerrun.aws.json
         run: |
           git config user.name github-actions
