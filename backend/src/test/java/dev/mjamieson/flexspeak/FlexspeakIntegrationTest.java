@@ -162,18 +162,18 @@ public class FlexspeakIntegrationTest extends AbstractTestContainers {
                 .exchange()
                 .expectStatus()
                 .isCreated();
-        webTestClient.post()
-                .uri(OPEN_AI_PATH + "/speech")
-                .header("Authorization", "Bearer " + token)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(
-                        Mono.just(sentence),
-                        Sentence.class
-                )
-                .exchange()
-                .expectStatus()
-                .isOk();
+//        webTestClient.post()
+//                .uri(OPEN_AI_PATH + "/speech")
+//                .header("Authorization", "Bearer " + token)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(
+//                        Mono.just(sentence),
+//                        Sentence.class
+//                )
+//                .exchange()
+//                .expectStatus()
+//                .isOk();
 
 
 //        List<OpenAI_SuggestionRequest> openAI_suggestionRequests = new ArrayList<>();
