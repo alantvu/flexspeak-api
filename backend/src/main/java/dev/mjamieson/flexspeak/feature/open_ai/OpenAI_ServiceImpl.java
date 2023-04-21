@@ -46,25 +46,19 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
 
         // Remove all commas and full-stops
         processedString = processedString.replaceAll("[,.]", "");
-//        processedString += " ->";
-        List<String> stopList = new ArrayList<String>();
-        stopList.add("\n");
-        CompletionRequest completionRequest = CompletionRequest.builder()
-                .prompt(processedString)
-                .temperature(0.0)
-                .frequencyPenalty(1.57)
-                .maxTokens(20)
-                .topP(1.0)
-                .bestOf(1)
-                .stop(stopList)
-                .echo(false)
-                .model("davinci")
-                .build();
-//        List<CompletionChoice> completionChoices = openAiService.createCompletion("ada:ft-personal:grammar-plus-2023-03-05-05-05-48",completionRequest).getChoices();
-//        List<CompletionChoice> completionChoices = openAiService.createCompletion("gpt-3.5-turbo",completionRequest).getChoices();
-        List<CompletionChoice> completionChoices = openAiService.createCompletion(completionRequest).getChoices();
-        String aiSentence = completionChoices.get(0).getText();
+//        "You are an AAC system helping a non-speaking individual communicate efficiently by converting their message into a complete message."
 
+        ChatMessage chatMessage = new ChatMessage("user",
+                "You are an AAC system helping a non-speaking individual communicate efficiently by converting their message into a complete message. Your task is to generate accurate and meaningful messages based on the user's input."
+                        + processedString);
+        ChatCompletionRequest completionRequest = ChatCompletionRequest.builder()
+                .messages(Arrays.asList(chatMessage))
+                .model("gpt-3.5-turbo")
+                .temperature(0.07)
+                .build();
+        List<ChatCompletionChoice> completionChoices = openAiService.createChatCompletion(completionRequest).getChoices();
+        ChatCompletionChoice completionChoice = completionChoices.get(0);
+        String aiSentence = completionChoice.getMessage().getContent();
         return Sentence.builder()
                 .sentence(aiSentence)
                 .build();
@@ -80,7 +74,7 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
             ChatMessage chatMessage = new ChatMessage("user",
                     "Recommend 8 words to add to an augmentative and alternative communication (AAC) system of a user who enjoys discussing these topics, ONLY have the name of the food: USER INPUT: "
                             + request.request());
-            OpenAI_SuggestionsResponse response = callOpen_AI(chatMessage, request);
+            OpenAI_SuggestionsResponse response = callOpen_AIGPT3_5(chatMessage, request);
             openAISuggestionsDTOS.add(response);
         }
 
@@ -88,7 +82,7 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
     }
 
     @SneakyThrows
-    private OpenAI_SuggestionsResponse callOpen_AI(ChatMessage chatMessage, OpenAI_SuggestionRequest openAI_suggestionRequest) {
+    private OpenAI_SuggestionsResponse callOpen_AIGPT3_5(ChatMessage chatMessage, OpenAI_SuggestionRequest openAI_suggestionRequest) {
         ChatCompletionRequest completionRequest = ChatCompletionRequest.builder()
                 .messages(Arrays.asList(chatMessage))
                 .model("gpt-3.5-turbo")
