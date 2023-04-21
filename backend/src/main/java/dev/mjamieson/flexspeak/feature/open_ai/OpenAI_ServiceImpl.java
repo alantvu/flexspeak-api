@@ -55,6 +55,7 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
                 .messages(Arrays.asList(chatMessage))
                 .model("gpt-3.5-turbo")
                 .temperature(0.07)
+                .topP(1.0)
                 .build();
         List<ChatCompletionChoice> completionChoices = openAiService.createChatCompletion(completionRequest).getChoices();
         ChatCompletionChoice completionChoice = completionChoices.get(0);
