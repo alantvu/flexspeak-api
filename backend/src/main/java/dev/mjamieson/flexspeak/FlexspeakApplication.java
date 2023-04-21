@@ -10,9 +10,6 @@ import java.time.Clock;
 @SpringBootApplication
 public class FlexspeakApplication {
 	public static void main(String[] args) {
-//		new SpringApplicationBuilder(FlexspeakApplication.class)
-//				.build()
-//				.run(args);
 		SpringApplication.run(FlexspeakApplication.class,args);
 	}
 
