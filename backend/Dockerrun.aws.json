@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "flexspeak-api",
-      "image": "michaeljamieson10/flexspeak-api:22.04.2023.15.06.30",
+      "image": "michaeljamieson10/flexspeak-api:22.04.2023.17.33.43",
       "essential": true,
       "memory": 512,
       "portMappings": [
