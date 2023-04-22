@@ -66,17 +66,7 @@ public class CustomWordServiceImpl implements CustomWordService {
         return customWordDTOS;
     }
 
-    @SneakyThrows
-    private void storeInS3Bucket(MultipartFile multipartFile, String finalFileName) {
-        if (multipartFile.getBytes().length < 0) throw new GeneralMessageException("Something is wrong with a file you uploaded");
-        amazonS3StorageService.store(multipartFile.getBytes(), finalFileName);
-    }
 
-    private void saveCustomWordAndImage(MultipartFile multipartFile,@CurrentUsername String username, CustomWordDTO customWordDTO){
-        String fileName = createFileName(multipartFile);
-        storeInS3Bucket(multipartFile,fileName);
-        customWordDAO.save(username,CustomWordDTO.fromWithImagePath(customWordDTO,fileName));
-    };
     private void handleSingleCustomWord(String username, MultipartHttpServletRequest request, CustomWordDTO customWordDTO) {
         MultipartFile imageMultipartFile = request.getFile(IMAGE_FILE);
 
@@ -86,11 +76,19 @@ public class CustomWordServiceImpl implements CustomWordService {
             customWordDAO.save(username, customWordDTO);
         }
     };
-
+    private void saveCustomWordAndImage(MultipartFile multipartFile,@CurrentUsername String username, CustomWordDTO customWordDTO){
+        String fileName = createFileName(multipartFile);
+        storeInS3Bucket(multipartFile,fileName);
+        customWordDAO.save(username,CustomWordDTO.fromWithImagePath(customWordDTO,fileName));
+    };
     private String createFileName(MultipartFile multipartFile) {
         UUID uuid = UUID.randomUUID();
         return uuid.toString().replace("-", "") + multipartFile.getOriginalFilename().replace("-","");
     }
-
+    @SneakyThrows
+    private void storeInS3Bucket(MultipartFile multipartFile, String finalFileName) {
+        if (multipartFile.getBytes().length < 0) throw new GeneralMessageException("Something is wrong with a file you uploaded");
+        amazonS3StorageService.store(multipartFile.getBytes(), finalFileName);
+    }
 
 }
