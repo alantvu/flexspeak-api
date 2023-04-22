@@ -1,10 +1,10 @@
 package dev.mjamieson.flexspeak.feature.open_ai;
 
-import com.theokanning.openai.completion.CompletionChoice;
-import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.completion.chat.ChatCompletionChoice;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatMessage;
+import com.theokanning.openai.image.CreateImageRequest;
+import com.theokanning.openai.image.ImageResult;
 import com.theokanning.openai.service.OpenAiService;
 import dev.mjamieson.flexspeak.feature.aac.AAC_Service;
 import dev.mjamieson.flexspeak.annotation.CurrentUsername;
@@ -80,6 +80,22 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
         }
 
         return openAISuggestionsDTOS;
+    }
+
+    @Override
+    public OpenAI_ImageResponse postImage(String imageName) {
+        CreateImageRequest request =  CreateImageRequest.builder()
+                .n(1)
+                .prompt(imageName)
+                .size("256x256")
+                .responseFormat("b64_json")
+                .build();
+        ImageResult imageResult = openAiService.createImage(request);
+//        List<String> b64JsonList = imageResult.getData().stream()
+//                .map(Image::getB64Json)
+//                .collect(Collectors.toList());
+
+        return new OpenAI_ImageResponse(imageResult.getData());
     }
 
     @SneakyThrows

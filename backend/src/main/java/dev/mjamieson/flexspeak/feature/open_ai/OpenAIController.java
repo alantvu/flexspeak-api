@@ -30,4 +30,10 @@ public class OpenAIController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(createdSuggestions);
     }
+    @PostMapping("/image")
+    public ResponseEntity<OpenAI_ImageResponse> createImages(@AuthenticationPrincipal UserDetails userDetails, @RequestBody String openAI_suggestionRequests) {
+        OpenAI_ImageResponse openAI_imageResponse = openAI_service.postImage(openAI_suggestionRequests);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(openAI_imageResponse);
+    }
 }
