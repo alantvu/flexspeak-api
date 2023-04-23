@@ -12,7 +12,6 @@ public class FlexspeakApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FlexspeakApplication.class,args);
 	}
-
 	@Bean
 	Clock clock() {
 		return Clock.systemUTC();
