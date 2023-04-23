@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CustomWordServiceImpl implements CustomWordService {
-
-    private final AmazonS3StorageService amazonS3StorageService;
     @Qualifier("jpa")
     private final CustomWordDAO customWordDAO;
 
@@ -99,7 +97,6 @@ public class CustomWordServiceImpl implements CustomWordService {
                 finalFileName,
                 multipartFile.getBytes()
                 );
-//        amazonS3StorageService.store(multipartFile.getBytes(), finalFileName);
     }
     private byte[] getFromS3Bucket(String imagePath) {
         return s3Service.getObject(s3Buckets.getFlexspeak(), imagePath);
