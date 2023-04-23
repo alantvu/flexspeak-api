@@ -22,7 +22,7 @@ public class Dloader implements CommandLineRunner{
     public void run(String... args) throws Exception {
 //        authData();
 //        openAI_service.postImage("cat");
-        testBucketUploadAndDownload();
+//        testBucketUploadAndDownload();
 
     }
 
