@@ -16,4 +16,5 @@ public class FlexspeakApplication {
 	Clock clock() {
 		return Clock.systemUTC();
 	}
+
 }
