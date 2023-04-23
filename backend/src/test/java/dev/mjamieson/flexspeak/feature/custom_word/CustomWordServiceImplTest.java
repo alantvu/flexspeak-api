@@ -1,7 +1,6 @@
 package dev.mjamieson.flexspeak.feature.custom_word;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import dev.mjamieson.flexspeak.feature.aws_s3_bucket.AmazonS3StorageService;
 import dev.mjamieson.flexspeak.feature.s3.S3Buckets;
 import dev.mjamieson.flexspeak.feature.s3.S3Service;
 import lombok.SneakyThrows;

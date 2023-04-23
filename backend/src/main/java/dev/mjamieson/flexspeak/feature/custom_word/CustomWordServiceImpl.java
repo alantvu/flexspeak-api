@@ -3,7 +3,6 @@ package dev.mjamieson.flexspeak.feature.custom_word;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.mjamieson.flexspeak.annotation.CurrentUsername;
 import dev.mjamieson.flexspeak.exception.GeneralMessageException;
-import dev.mjamieson.flexspeak.feature.aws_s3_bucket.AmazonS3StorageService;
 import dev.mjamieson.flexspeak.feature.s3.S3Buckets;
 import dev.mjamieson.flexspeak.feature.s3.S3Service;
 import lombok.RequiredArgsConstructor;
