@@ -14,20 +14,20 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 public class AmazonS3ClientConfiguration {
     private final AmazonS3Configuration amazonS3Configuration;
 
-    @Bean
-    public S3Client s3Client() {
-        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(amazonS3Configuration.getAccessKeyId(), amazonS3Configuration.getSecretAccessKey());
-        Region region = Region.US_EAST_1; // You can set the region from the configuration
-        StaticCredentialsProvider staticCredentialsProvider = StaticCredentialsProvider.create(awsCreds);
-        return S3Client.builder().region(region).credentialsProvider(staticCredentialsProvider).build();
-    }
+//    @Bean
+//    public S3Client s3Client() {
+//        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(amazonS3Configuration.getAccessKeyId(), amazonS3Configuration.getSecretAccessKey());
+//        Region region = Region.US_EAST_1; // You can set the region from the configuration
+//        StaticCredentialsProvider staticCredentialsProvider = StaticCredentialsProvider.create(awsCreds);
+//        return S3Client.builder().region(region).credentialsProvider(staticCredentialsProvider).build();
+//    }
 
-    @Bean
-    public S3Presigner s3Presigner() {
-        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(amazonS3Configuration.getAccessKeyId(), amazonS3Configuration.getSecretAccessKey());
-        Region region = Region.US_EAST_1; // You can set the region from the configuration
-        StaticCredentialsProvider staticCredentialsProvider = StaticCredentialsProvider.create(awsCreds);
-        return S3Presigner.builder().region(region).credentialsProvider(staticCredentialsProvider).build();
-    }
+//    @Bean
+//    public S3Presigner s3Presigner() {
+//        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(amazonS3Configuration.getAccessKeyId(), amazonS3Configuration.getSecretAccessKey());
+//        Region region = Region.US_EAST_1; // You can set the region from the configuration
+//        StaticCredentialsProvider staticCredentialsProvider = StaticCredentialsProvider.create(awsCreds);
+//        return S3Presigner.builder().region(region).credentialsProvider(staticCredentialsProvider).build();
+//    }
 
 }

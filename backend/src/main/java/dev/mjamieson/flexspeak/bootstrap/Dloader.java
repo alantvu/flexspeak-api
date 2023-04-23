@@ -1,6 +1,8 @@
 package dev.mjamieson.flexspeak.bootstrap;
 
 import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_Service;
+import dev.mjamieson.flexspeak.feature.s3.S3Buckets;
+import dev.mjamieson.flexspeak.feature.s3.S3Service;
 import dev.mjamieson.flexspeak.feature.user.auth.AuthenticationService;
 import dev.mjamieson.flexspeak.feature.user.auth.RegisterRequest;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +16,27 @@ import org.springframework.stereotype.Component;
 public class Dloader implements CommandLineRunner{
     private final AuthenticationService authenticationService;
     private final OpenAI_Service openAI_service;
+    private final S3Service s3Service;
+    private final S3Buckets s3Buckets;
     @Override
     public void run(String... args) throws Exception {
 //        authData();
 //        openAI_service.postImage("cat");
+        testBucketUploadAndDownload();
 
+    }
+
+    private void testBucketUploadAndDownload() {
+        s3Service.putObject(
+                s3Buckets.getFlexspeak(),
+                "foo",
+                "Hello World".getBytes()
+        );
+        byte[] object = s3Service.getObject(
+                s3Buckets.getFlexspeak(),
+                "foo"
+        );
+        System.out.println("Hooray: " + new String(object));
     }
 
     private void authData() {

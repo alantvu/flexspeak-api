@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.mjamieson.flexspeak.annotation.CurrentUsername;
 import dev.mjamieson.flexspeak.exception.GeneralMessageException;
 import dev.mjamieson.flexspeak.feature.aws_s3_bucket.AmazonS3StorageService;
+import dev.mjamieson.flexspeak.feature.s3.S3Buckets;
+import dev.mjamieson.flexspeak.feature.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +26,10 @@ public class CustomWordServiceImpl implements CustomWordService {
     private final AmazonS3StorageService amazonS3StorageService;
     @Qualifier("jpa")
     private final CustomWordDAO customWordDAO;
+
+
+    private final S3Service s3Service;
+    private final S3Buckets s3Buckets;
 
     static final String IMAGE_FILE = "file";
     static final String METADATA_PARAMETER_NAME = "metadata";
@@ -60,7 +66,7 @@ public class CustomWordServiceImpl implements CustomWordService {
         List<CustomWordDTO> customWordDTOS = customWordDAO.get(username)
                 .stream()
                 .map(customWord -> Optional.ofNullable(customWord.getImagePath())
-                        .map(imagePath -> CustomWordDTO.fromWithImagePath(customWord, amazonS3StorageService.generatePresignedUrl(imagePath)))
+                        .map(imagePath -> CustomWordDTO.fromWithImagePath(customWord, s3Service.generatePresignedUrl(s3Buckets.getFlexspeak(), imagePath)))
                         .orElseGet(() -> CustomWordDTO.from(customWord)))
                 .collect(Collectors.toList());
         return customWordDTOS;
@@ -88,7 +94,15 @@ public class CustomWordServiceImpl implements CustomWordService {
     @SneakyThrows
     private void storeInS3Bucket(MultipartFile multipartFile, String finalFileName) {
         if (multipartFile.getBytes().length < 0) throw new GeneralMessageException("Something is wrong with a file you uploaded");
-        amazonS3StorageService.store(multipartFile.getBytes(), finalFileName);
+        s3Service.putObject(
+                s3Buckets.getFlexspeak(),
+                finalFileName,
+                multipartFile.getBytes()
+                );
+//        amazonS3StorageService.store(multipartFile.getBytes(), finalFileName);
+    }
+    private byte[] getFromS3Bucket(String imagePath) {
+        return s3Service.getObject(s3Buckets.getFlexspeak(), imagePath);
     }
 
 }
