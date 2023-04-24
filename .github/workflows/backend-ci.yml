@@ -47,5 +47,3 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           FLATICON_API_KEY: ${{ secrets.FLATICON_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
