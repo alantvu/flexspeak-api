@@ -36,6 +36,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'maven'
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and run Unit/Integration Tests with Maven
         run: mvn -ntp -B -Ddocker.image.tag=latest verify
         env:
