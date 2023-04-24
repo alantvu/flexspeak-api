@@ -37,8 +37,10 @@ jobs:
           java-version: '17'
           cache: 'maven'
       - name: Build and run Unit/Integration Tests with Maven
-        run: mvn -ntp -B -Ddocker.image.tag=latest verify jib:dockerBuild
+        run: mvn -ntp -B -Ddocker.image.tag=latest verify
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           FLATICON_API_KEY: ${{ secrets.FLATICON_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
