@@ -42,7 +42,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and run Unit/Integration Tests with Maven
-        run: mvn -ntp -B verify
+        run: mvn -ntp -B -Ddocker.image.tag=latest -Djib.dockerfile.skip=true verify
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           FLATICON_API_KEY: ${{ secrets.FLATICON_API_KEY }}
