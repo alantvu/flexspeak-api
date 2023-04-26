@@ -1,5 +1,6 @@
 package dev.mjamieson.flexspeak.bootstrap;
 
+import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_ImageRequest;
 import dev.mjamieson.flexspeak.feature.open_ai.OpenAI_Service;
 import dev.mjamieson.flexspeak.feature.s3.S3Buckets;
 import dev.mjamieson.flexspeak.feature.s3.S3Service;
@@ -21,7 +22,7 @@ public class Dloader implements CommandLineRunner{
     @Override
     public void run(String... args) throws Exception {
 //        authData();
-//        openAI_service.postImage("cat");
+//        openAI_service.postImage(new OpenAI_ImageRequest("cat"));
 //        testBucketUploadAndDownload();
 
     }

@@ -10,5 +10,5 @@ public interface OpenAI_Service {
     Sentence postSpeech(@CurrentUsername String username, Sentence sentence);
     List<OpenAI_SuggestionsResponse> postSuggestion(@CurrentUsername String username, List<OpenAI_SuggestionRequest> openAI_suggestionRequests);
 
-    OpenAI_ImageResponse postImage(String imageName);
+    OpenAI_ImageResponse postImage(OpenAI_ImageRequest openAI_imageRequest);
 }
