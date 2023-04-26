@@ -7,9 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
@@ -44,7 +46,7 @@ class S3ServiceTest {
         underTest = new S3Service(s3Client, s3Presigner);
 
         // Mock AmazonS3Configuration values
-//        lenient().when(amazonS3Configuration.getS3bucketName()).thenReturn("test-bucket");
+//        lenient().when(s3Client.getS3bucketName()).thenReturn("test-bucket");
 //        lenient().when(amazonS3Configuration.getAccessKeyId()).thenReturn("test-access-key-id");
 //        lenient().when(amazonS3Configuration.getSecretAccessKey()).thenReturn("test-secret-access-key");
     }
@@ -65,20 +67,20 @@ class S3ServiceTest {
 
     @Test
     void getObject() throws IOException {
-        // Given
-//        String bucketName = "test-bucket";
-//        String key = "test-key";
-//        byte[] expectedBytes = new byte[]{1, 2, 3};
-//
-//        ResponseInputStream<GetObjectResponse> responseInputStream = mock(ResponseInputStream.class);
-//        when(s3Client.getObject(any(GetObjectRequest.class))).thenReturn(responseInputStream);
-//        when(responseInputStream.readAllBytes()).thenReturn(expectedBytes);
-//
-//        // When
-//        byte[] result = underTest.getObject(bucketName, key);
-//
-//        // Then
-//        assertArrayEquals(expectedBytes, result);
+//         Given
+        String bucketName = "test-bucket";
+        String key = "test-key";
+        byte[] expectedBytes = new byte[]{1, 2, 3};
+
+        ResponseInputStream<GetObjectResponse> responseInputStream = mock(ResponseInputStream.class);
+        when(s3Client.getObject(any(GetObjectRequest.class))).thenReturn(responseInputStream);
+        when(responseInputStream.readAllBytes()).thenReturn(expectedBytes);
+
+        // When
+        byte[] result = underTest.getObject(bucketName, key);
+
+        // Then
+        assertArrayEquals(expectedBytes, result);
     }
 
     @SneakyThrows
