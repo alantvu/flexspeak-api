@@ -31,7 +31,7 @@ public class OpenAIController {
                 .body(createdSuggestions);
     }
     @PostMapping("/image")
-    public ResponseEntity<OpenAI_ImageResponse> createImages(@AuthenticationPrincipal UserDetails userDetails, @RequestBody OpenAI_ImageRequest openAI_imageRequest) {
+    public ResponseEntity<OpenAI_ImageResponse> createImages(@AuthenticationPrincipal UserDetails userDetails, @RequestBody String openAI_imageRequest) {
         OpenAI_ImageResponse openAI_imageResponse = openAI_service.postImage(openAI_imageRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(openAI_imageResponse);
