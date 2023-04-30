@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - better_deploy_CI_Github
+      - master
     paths:
       - backend/**
 
