@@ -1,0 +1,23 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "flexspeak-api",
+      "image": "michaeljamieson10/flexspeak-api:30.04.2023.13.19.58",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 8080
+        }
+      ],
+      "environment": [
+        {
+          "name": "SPRING_DATASOURCE_URL",
+          "value": "jdbc:postgresql://awseb-e-3m3rsit3x8-stack-awsebrdsdatabase-h0a4zcqe0fjq.cpmr4ihortn6.us-east-1.rds.amazonaws.com:5432/customer"
+        }
+      ]
+    }
+  ]
+}

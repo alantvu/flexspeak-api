@@ -1,0 +1,11 @@
+version: '3'
+services:
+  db:
+    container_name: postgres
+    image: postgres:15.2
+    environment:
+      POSTGRES_USER: flexspeak123
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: customer
+    ports:
+      - "5332:5432"

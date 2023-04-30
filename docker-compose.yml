@@ -1,10 +1,35 @@
 version: '3'
 services:
   db:
-    image: postgres:14
+    container_name: postgres
+    image: postgres:15.2
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: db
+      POSTGRES_USER: flexspeak123
+      POSTGRES_PASSWORD: password123
+      PGDATA: /data/postgres
+    volumes:
+      - db:/data/postgres
     ports:
-      - "5432:5432"
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+  flexspeak-api:
+    container_name: flexspeak-api
+    image: michaeljamieson10/flexspeak-api
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/customer
+    ports:
+      - "8088:8080"
+    networks:
+      - db
+    depends_on:
+      - db
+    restart: unless-stopped
+
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db:
