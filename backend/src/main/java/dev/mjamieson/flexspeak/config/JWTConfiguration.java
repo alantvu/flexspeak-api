@@ -26,5 +26,6 @@ public class JWTConfiguration {
 //        key = Keys.hmacShaKeyFor(decodedKey);
         byte[] bytes = secret.getBytes();
         key = Keys.hmacShaKeyFor(bytes);
+
     }
 }
