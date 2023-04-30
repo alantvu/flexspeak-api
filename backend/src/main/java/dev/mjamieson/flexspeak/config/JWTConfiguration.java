@@ -15,7 +15,6 @@ import java.util.Base64;
 @Component
 @Data
 public class JWTConfiguration {
-//    private SecretKey key;
     private String secret;
     private long accessTokenExpirationTime;
     private long refreshTokenExpirationTime;
