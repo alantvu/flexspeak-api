@@ -21,6 +21,7 @@ public class JWTConfiguration {
 
     @PostConstruct
     private void init() {
+        System.out.println(secret + "  <--- SUPER SECRET");
         byte[] decodedKey = Base64.getDecoder().decode(secret);
         key = Keys.hmacShaKeyFor(decodedKey);
     }
