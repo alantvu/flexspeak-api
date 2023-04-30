@@ -37,6 +37,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Clean
+        run: mvn clean
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -73,8 +75,4 @@ jobs:
       - name: Commit and push Dockerrun.aws.json
         run: |
           git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit -m "Update Dockerrun.aws.json docker image with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
-          git push
-     
+          git config user.email github
