@@ -15,7 +15,7 @@ import java.util.Base64;
 @Component
 @Data
 public class JWTConfiguration {
-    private String secret;
+//    private String secret;
     private long accessTokenExpirationTime;
     private long refreshTokenExpirationTime;
 
@@ -29,6 +29,6 @@ public class JWTConfiguration {
 
 //    }
     public Key getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+        return Keys.hmacShaKeyFor("566D597133743677397A244226452948404D635166546A576E5A723475377821".getBytes());
     }
 }
