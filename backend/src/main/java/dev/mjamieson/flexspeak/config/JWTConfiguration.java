@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.security.Key;
 import java.util.Base64;
 
 //jwt.secret=566D597133743677397A244226452948404D635166546A576E5A723475377821
@@ -14,7 +15,7 @@ import java.util.Base64;
 @Component
 @Data
 public class JWTConfiguration {
-    private SecretKey key;
+//    private SecretKey key;
     private String secret;
     private long accessTokenExpirationTime;
     private long refreshTokenExpirationTime;
@@ -27,5 +28,8 @@ public class JWTConfiguration {
 //        byte[] bytes = "566D597133743677397A244226452948404D635166546A576E5A723475377821".getBytes();
 //        key = Keys.hmacShaKeyFor(bytes);
 
+    }
+    public Key getSigningKey() {
+        return Keys.hmacShaKeyFor(secret.getBytes());
     }
 }

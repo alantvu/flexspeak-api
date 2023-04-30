@@ -83,7 +83,7 @@ public class JwtService {
     }
 
     private Claims parseToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(jwt_configurationProperty.getKey()).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(jwt_configurationProperty.getSigningKey()).build().parseClaimsJws(token).getBody();
     }
 
     private String createToken(Map<String, Object> claims, String subject, Long expirationTime) {
@@ -95,7 +95,7 @@ public class JwtService {
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plus(expirationTime, ChronoUnit.SECONDS)))
 //                .setExpiration(Date.from(now.plus(expirationTime, ChronoUnit.MINUTES)))
-                .signWith(jwt_configurationProperty.getKey())
+                .signWith(jwt_configurationProperty.getSigningKey())
                 .compact();
     }
 }
