@@ -83,10 +83,10 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
     }
 
     @Override
-    public OpenAI_ImageResponse postImage(OpenAI_ImageRequest openAI_imageRequest) {
+    public OpenAI_ImageResponse postImage(String openAI_imageRequest) {
         CreateImageRequest request =  CreateImageRequest.builder()
                 .n(4)
-                .prompt(openAI_imageRequest.searchText())
+                .prompt(openAI_imageRequest)
                 .size("256x256")
                 .responseFormat("b64_json")
                 .build();
