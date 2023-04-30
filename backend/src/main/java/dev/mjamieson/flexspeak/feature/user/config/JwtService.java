@@ -25,7 +25,7 @@ public class JwtService {
     private long accessTokenExpirationTime = 86400000;
     private long refreshTokenExpirationTime = 259200000;
     public Key getSigningKey() {
-        return Keys.hmacShaKeyFor("VGhpcyBpcyBhIHRlc3Q=".getBytes());
+        return Keys.hmacShaKeyFor("foobar_123456789_foobar_123456789_foobar_123456789_foobar_123456789".getBytes());
     }
 
     public String generateToken(User user) {
