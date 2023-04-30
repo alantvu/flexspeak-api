@@ -11,7 +11,7 @@ import java.security.Key;
 import java.util.Base64;
 
 //jwt.secret=566D597133743677397A244226452948404D635166546A576E5A723475377821
-@ConfigurationProperties(prefix = "jwt")
+//@ConfigurationProperties(prefix = "jwt")
 @Component
 @Data
 public class JWTConfiguration {
@@ -29,6 +29,6 @@ public class JWTConfiguration {
 
 //    }
     public Key getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+        return Keys.hmacShaKeyFor("566D597133743677397A244226452948404D635166546A576E5A723475377821".getBytes());
     }
 }
