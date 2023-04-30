@@ -24,8 +24,8 @@ public class JWTConfiguration {
 //        System.out.println(secret + "  <--- SUPER SECRET");
 //        byte[] decodedKey = Base64.getDecoder().decode(secret);
 //        key = Keys.hmacShaKeyFor(decodedKey);
-        byte[] bytes = "566D597133743677397A244226452948404D635166546A576E5A723475377821".getBytes();
-        key = Keys.hmacShaKeyFor(bytes);
+//        byte[] bytes = "566D597133743677397A244226452948404D635166546A576E5A723475377821".getBytes();
+//        key = Keys.hmacShaKeyFor(bytes);
 
     }
 }
