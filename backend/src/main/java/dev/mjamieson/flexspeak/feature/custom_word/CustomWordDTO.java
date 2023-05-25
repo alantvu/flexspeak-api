@@ -9,7 +9,7 @@ public record CustomWordDTO(
         String imagePath,
         Integer gridRow,
         Integer gridColumn,
-        GridTitleEnum gridTitleEnum
+        String gridTitleEnum
 ) {
     public static CustomWordDTO from(CustomWord customWord) {
         return new CustomWordDTO(

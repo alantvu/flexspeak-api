@@ -36,7 +36,7 @@ class CustomWordJPADataAccessServiceImplTest {
         // Given
         User user = new User();
         String username = "test@example.com";
-        CustomWordDTO customWordDTO = new CustomWordDTO("Hello", "Hello", "path/to/image", 1, 1, GridTitleEnum.ALL);
+        CustomWordDTO customWordDTO = new CustomWordDTO("Hello", "Hello", "path/to/image", 1, 1, "Category");
 
         when(userRepository.findByEmail(username)).thenReturn(Optional.of(user));
         when(customWordRepository.findByUserAndGridColumnAndGridRowAndGridTitleEnum(any(), any(), any(), any())).thenReturn(null);

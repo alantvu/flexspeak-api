@@ -34,9 +34,9 @@ public class CustomWord {
 
     private Integer gridColumn;
 
-    @Enumerated(EnumType.STRING)
-    @Type(PostgreSQLEnumType.class)
-    private GridTitleEnum gridTitleEnum;
+//    @Enumerated(EnumType.STRING)
+//    @Type(PostgreSQLEnumType.class)
+    private String gridTitleEnum;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
