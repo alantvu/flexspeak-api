@@ -48,8 +48,11 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
         processedString = processedString.replaceAll("[,.]", "");
 //        "You are an AAC system helping a non-speaking individual communicate efficiently by converting their message into a complete message."
 
+//        ChatMessage chatMessage = new ChatMessage("user",
+//                "You are an AAC system helping a non-speaking individual communicate efficiently by converting their message into a complete message. Your task is to generate accurate and meaningful messages based on the user's input."
+//                        + processedString);
         ChatMessage chatMessage = new ChatMessage("user",
-                "You are an AAC system helping a non-speaking individual communicate efficiently by converting their message into a complete message. Your task is to generate accurate and meaningful messages based on the user's input."
+                "You are an AAC system designed to assist non-speaking individuals in efficient communication. Their messages may be incomplete. Convert their messages into complete and meaningful sentences. Just complete the message and do not ask the user any questions."
                         + processedString);
         ChatCompletionRequest completionRequest = ChatCompletionRequest.builder()
                 .messages(Arrays.asList(chatMessage))
