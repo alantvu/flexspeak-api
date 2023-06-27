@@ -60,7 +60,7 @@ public class OpenAI_ServiceImpl implements OpenAI_Service {
                         + processedString + "\"");
 
         ChatCompletionRequest completionRequest = ChatCompletionRequest.builder()
-                .messages(Arrays.asList(chatMessage))
+                .messages(Arrays.asList(systemMessage, userMessage))
                 .model("gpt-3.5-turbo")
                 .temperature(0.1)
                 .topP(0.5)
