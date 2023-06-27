@@ -53,7 +53,7 @@ public Sentence postSpeech(@CurrentUsername String username, Sentence sentence) 
             .messages(Arrays.asList(systemMessage, userMessage))
             .model("gpt-3.5-turbo")
             .temperature(0.1)
-            .topP(0.5)
+            .topP(1.0)
             .build();
 
     List<ChatCompletionChoice> completionChoices = openAiService.createChatCompletion(completionRequest).getChoices();
